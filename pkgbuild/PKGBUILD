@@ -1,0 +1,42 @@
+# Maintainer: Big WindowMaker <https://github.com/big-windowmaker>
+#
+# Big WM Display Resolution: monitores das sessões X11 e Wayland do Big
+# WindowMaker. Pacote próprio (repositório próprio); o big-wm-session e o
+# big-wm-wayland dependem dele. Para compilar a cópia local:
+#   BWMDR_SOURCE="git+file://$PWD/.." makepkg
+
+pkgname=big-wm-display-resolution
+# printf embutido do bash (o namcap lê o PKGBUILD sem PATH), como no big-wm.
+pkgver=$(printf '%(%y.%m.%d)T' -1)
+pkgrel=$(printf '%(%H%M)T' -1)
+pkgdesc="Big WindowMaker: monitores (resolução, disposição, perfis, reversão segura) no X11 e no Wayland"
+# O big-wm-display-helper é binário (wayland-client, Xlib/XRandR).
+arch=('x86_64')
+url="https://github.com/big-windowmaker/big-wm-display-resolution"
+license=('GPL-2.0-or-later')
+depends=('python' 'python-gobject' 'python-cairo' 'gtk3' 'wayland' 'libx11' 'libxrandr'
+	'xorg-xrandr' # backend X11
+	'hwdata'      # nomes dos fabricantes (pnp.ids), os mesmos do wlroots
+	'util-linux'  # logger
+)
+optdepends=(
+	'gtk-layer-shell: Identificar mostra o nome em cada monitor no Wayland'
+	'arandr: alternativa no X11'
+	'wdisplays: alternativa no Wayland'
+)
+makedepends=('git' 'wayland' 'gettext')
+checkdepends=('python-pytest')
+source=("$pkgname::${BWMDR_SOURCE:-git+$url.git}")
+sha256sums=('SKIP')
+
+build() {
+	make -C "$pkgname"
+}
+
+check() {
+	make -C "$pkgname" check
+}
+
+package() {
+	make -C "$pkgname" DESTDIR="$pkgdir" install
+}

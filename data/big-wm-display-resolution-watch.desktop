@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Big WM Display Resolution (monitor hotplug)
+Name[pt_BR]=Big WM Display Resolution (monitores conectados e desconectados)
+Comment=Applies the saved profile when the set of connected monitors changes
+Comment[pt_BR]=Aplica o perfil salvo quando o conjunto de monitores conectados muda
+Exec=big-wm-display-resolution --watch
+Terminal=false
+NoDisplay=true
+OnlyShowIn=WindowMaker;wlmaker;
+X-GNOME-Autostart-enabled=true

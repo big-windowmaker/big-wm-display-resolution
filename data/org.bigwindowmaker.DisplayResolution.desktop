@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Name=Monitors
+Name[pt_BR]=Monitores
+Name[pt]=Monitores
+GenericName=Display settings
+GenericName[pt_BR]=Configurações de tela
+Comment=Resolution, arrangement, rotation and profiles of the monitors (Big WM Display Resolution)
+Comment[pt_BR]=Resolução, disposição, rotação e perfis dos monitores (Big WM Display Resolution)
+Exec=big-wm-display-resolution
+Icon=big-wm-display-resolution
+Terminal=false
+StartupNotify=true
+StartupWMClass=org.bigwindowmaker.DisplayResolution
+Categories=Settings;HardwareSettings;DesktopSettings;
+Keywords=monitor;display;screen;resolution;rotation;refresh;multi-monitor;arandr;wdisplays;
+Keywords[pt_BR]=monitor;tela;resolução;rotação;frequência;vários monitores;arandr;wdisplays;
+OnlyShowIn=WindowMaker;wlmaker;

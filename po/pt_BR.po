@@ -1,0 +1,385 @@
+# Big WM Display Resolution: português do Brasil.
+# SPDX-License-Identifier: GPL-2.0-or-later
+msgid ""
+msgstr ""
+"Project-Id-Version: big-wm-display-resolution\n"
+"PO-Revision-Date: 2026-11-09 00:00-0300\n"
+"Last-Translator: Big WindowMaker\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Landscape"
+msgstr "Paisagem"
+
+msgid "Portrait (rotated left)"
+msgstr "Retrato (girado à esquerda)"
+
+msgid "Landscape (upside down)"
+msgstr "Paisagem (de cabeça para baixo)"
+
+msgid "Portrait (rotated right)"
+msgstr "Retrato (girado à direita)"
+
+msgid "At least one monitor must stay on."
+msgstr "Pelo menos um monitor precisa ficar ligado."
+
+#, python-format
+msgid "%(name)s has no resolution."
+msgstr "%(name)s está sem resolução."
+
+#, python-format
+msgid "%(name)s does not announce the mode %(mode)s."
+msgstr "%(name)s não anuncia o modo %(mode)s."
+
+#, python-format
+msgid "%(name)s does not support this orientation."
+msgstr "%(name)s não aceita esta orientação."
+
+#, python-format
+msgid "%(name)s: per-monitor scale does not exist on X11."
+msgstr "%(name)s: escala por monitor não existe no X11."
+
+#, python-format
+msgid "%(name)s: the scale must be between 1 and 3."
+msgstr "%(name)s: a escala precisa ficar entre 1 e 3."
+
+#, python-format
+msgid "%(name)s mirrors a monitor that is off or is itself a mirror."
+msgstr "%(name)s espelha um monitor desligado ou que já é um espelho."
+
+#, python-format
+msgid "%(name)s and %(source)s need the same resolution to mirror."
+msgstr "%(name)s e %(source)s precisam da mesma resolução para espelhar."
+
+#, python-format
+msgid "%(a)s and %(b)s overlap."
+msgstr "%(a)s e %(b)s estão sobrepostos."
+
+msgid "The monitors must touch each other: there is a gap between them."
+msgstr "Os monitores precisam se encostar: há um vão entre eles."
+
+msgid "Negative positions are not allowed."
+msgstr "Posições negativas não são permitidas."
+
+#, python-format
+msgid "The arrangement (%(w)dx%(h)d) exceeds the maximum screen size (%(mw)dx%(mh)d)."
+msgstr "A disposição (%(w)dx%(h)d) passa do tamanho máximo da tela (%(mw)dx%(mh)d)."
+
+msgid "Only one monitor can be the primary one."
+msgstr "Só um monitor pode ser o principal."
+
+#, python-format
+msgid "%.2f Hz"
+msgstr "%.2f Hz"
+
+msgid "unknown"
+msgstr "desconhecido"
+
+msgid "recommended"
+msgstr "recomendada"
+
+#, python-format
+msgid "Could not read the monitors: %s"
+msgstr "Não foi possível ler os monitores: %s"
+
+msgid "Profile:"
+msgstr "Perfil:"
+
+msgid "Save as…"
+msgstr "Salvar como…"
+
+msgid "Rename…"
+msgstr "Renomear…"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Identify"
+msgstr "Identificar"
+
+msgid "Shows the name of each monitor on its screen"
+msgstr "Mostra o nome de cada monitor na própria tela"
+
+msgid "Side by side"
+msgstr "Lado a lado"
+
+msgid "Arranges the monitors in a row, left to right, aligned at the top"
+msgstr "Põe os monitores em fila, da esquerda para a direita, alinhados no topo"
+
+msgid "Defaults"
+msgstr "Padrão"
+
+msgid "All monitors on, at their native resolution, side by side"
+msgstr "Todos os monitores ligados, na resolução nativa, lado a lado"
+
+msgid "Monitor"
+msgstr "Monitor"
+
+msgid "Monitor:"
+msgstr "Monitor:"
+
+msgid "On"
+msgstr "Ligado"
+
+msgid "Primary monitor"
+msgstr "Monitor principal"
+
+msgid "Use:"
+msgstr "Uso:"
+
+msgid "Resolution:"
+msgstr "Resolução:"
+
+msgid "Refresh rate:"
+msgstr "Frequência:"
+
+msgid "Scale:"
+msgstr "Escala:"
+
+msgid "Mirror image (reflect)"
+msgstr "Imagem espelhada (reflexo)"
+
+msgid "Orientation:"
+msgstr "Orientação:"
+
+msgid "Position:"
+msgstr "Posição:"
+
+msgid "Variable refresh rate (VRR / Adaptive Sync)"
+msgstr "Taxa de atualização variável (VRR / Adaptive Sync)"
+
+msgid "VRR:"
+msgstr "VRR:"
+
+msgid "HDR:"
+msgstr "HDR:"
+
+msgid "Information"
+msgstr "Informações"
+
+msgid "EDID"
+msgstr "EDID"
+
+msgid "Reset"
+msgstr "Desfazer"
+
+msgid "Discards the changes not yet applied"
+msgstr "Descarta as mudanças ainda não aplicadas"
+
+msgid "Close"
+msgstr "Fechar"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "Current configuration"
+msgstr "Configuração atual"
+
+msgid "Defaults (all on, side by side)"
+msgstr "Padrão (todos ligados, lado a lado)"
+
+msgid "Saved automatically"
+msgstr "Salvo automaticamente"
+
+msgid "On Wayland, wlmaker has no configurable primary monitor: the first one in the arrangement holds the Dock."
+msgstr "No Wayland o wlmaker não tem monitor principal configurável: o primeiro da disposição fica com o Dock."
+
+msgid "Panels, the Dock and new windows prefer this monitor"
+msgstr "Painéis, o Dock e as janelas novas preferem este monitor"
+
+msgid "Extend the desktop"
+msgstr "Estender a área de trabalho"
+
+#, python-format
+msgid "Mirror %s"
+msgstr "Espelhar %s"
+
+msgid "Fractional scales reach applications that support fractional-scale; the others are drawn at 1× and enlarged."
+msgstr "Escalas fracionárias chegam aos aplicativos com fractional-scale; os outros são desenhados em 1× e ampliados."
+
+msgid "X11 has no per-monitor scale (xrandr --scale only stretches the picture). Use the GTK/Qt scale for larger text."
+msgstr "O X11 não tem escala por monitor (o xrandr --scale só estica a imagem). Para texto maior, use a escala do GTK/Qt."
+
+msgid "This monitor's driver does not offer reflection"
+msgstr "O driver deste monitor não oferece reflexo"
+
+#, python-format
+msgid "Changes not applied yet. Apply asks for confirmation and goes back to the previous configuration after %d seconds without an answer."
+msgstr "Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundos sem resposta."
+
+#, python-format
+msgid "%d monitor(s) connected. No saved configuration for this set of monitors yet: the one you keep is restored at login and when they are plugged in."
+msgstr "%d monitor(es) conectado(s). Ainda não há configuração salva para este conjunto de monitores: a que você mantiver volta no login e quando eles forem conectados."
+
+#, python-format
+msgid "%d monitor(s) connected. This configuration is restored at login and whenever this same set of monitors is connected."
+msgstr "%d monitor(es) conectado(s). Esta configuração volta no login e sempre que este mesmo conjunto de monitores for conectado."
+
+#, python-format
+msgid "The EDID declares %d–%d Hz."
+msgstr "O EDID declara %d–%d Hz."
+
+msgid "FreeSync block present."
+msgstr "Tem o bloco FreeSync."
+
+msgid "The driver does not report whether this output supports VRR (no vrr_capable property)."
+msgstr "O driver não informa se esta saída aceita VRR (sem a propriedade vrr_capable)."
+
+msgid "The driver reports this output as VRR capable."
+msgstr "O driver informa que esta saída aceita VRR."
+
+msgid "The driver reports this output as not VRR capable."
+msgstr "O driver informa que esta saída não aceita VRR."
+
+msgid "On X11 VRR is a driver option (Option \"VariableRefresh\" in xorg.conf), not a per-monitor setting."
+msgstr "No X11 o VRR é opção do driver (Option \"VariableRefresh\" no xorg.conf), não um ajuste por monitor."
+
+msgid "The compositor does not report adaptive sync (output management older than version 4)."
+msgstr "O compositor não informa a taxa variável (gerenciamento de saídas anterior à versão 4)."
+
+msgid "on"
+msgstr "ligada"
+
+msgid "off"
+msgstr "desligado"
+
+#, python-format
+msgid "Adaptive sync is %s and cannot be changed: the compositor refused the change in a test of this output."
+msgstr "A taxa variável está %s e não pode mudar: o compositor recusou a troca num teste desta saída."
+
+#, python-format
+msgid "The monitor declares HDR (%s)."
+msgstr "O monitor declara HDR (%s)."
+
+msgid "The monitor does not declare HDR in its EDID."
+msgstr "O monitor não declara HDR no EDID."
+
+msgid "No EDID: HDR capability unknown."
+msgstr "Sem EDID: não se sabe se há HDR."
+
+msgid "X11 has no HDR output."
+msgstr "O X11 não tem saída HDR."
+
+msgid "wlmaker does not drive HDR outputs, and output management has no HDR setting: there is nothing to turn on here."
+msgstr "O wlmaker não liga saídas em HDR e o gerenciamento de saídas não tem ajuste de HDR: não há o que ligar aqui."
+
+msgid "Manufacturer"
+msgstr "Fabricante"
+
+msgid "Model"
+msgstr "Modelo"
+
+msgid "Serial"
+msgstr "Serial"
+
+msgid "not informed"
+msgstr "não informado"
+
+msgid "Connector"
+msgstr "Conector"
+
+msgid "Native"
+msgstr "Nativa"
+
+msgid "Current"
+msgstr "Atual"
+
+msgid "Size"
+msgstr "Tamanho"
+
+#, python-format
+msgid "%d × %d mm (%.1f″)"
+msgstr "%d × %d mm (%.1f″)"
+
+msgid "Year"
+msgstr "Ano"
+
+#, python-format
+msgid "EDID (%d bytes)"
+msgstr "EDID (%d bytes)"
+
+msgid "EDID: not available"
+msgstr "EDID: indisponível"
+
+msgid "This profile no longer fits these monitors (a mode it uses is not announced any more)."
+msgstr "Este perfil não serve mais para estes monitores (um modo que ele usa não é mais anunciado)."
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Profile name:"
+msgstr "Nome do perfil:"
+
+msgid "Save profile"
+msgstr "Salvar perfil"
+
+msgid "Rename profile"
+msgstr "Renomear perfil"
+
+#, python-format
+msgid "Delete the profile \"%s\"?"
+msgstr "Excluir o perfil \"%s\"?"
+
+msgid "saved automatically"
+msgstr "salvo automaticamente"
+
+#, python-format
+msgid "The configuration was refused in the test: %s"
+msgstr "A configuração foi recusada no teste: %s"
+
+#, python-format
+msgid "Could not start the revert guard, nothing was changed: %s"
+msgstr "Não foi possível iniciar o vigia da reversão; nada foi mudado: %s"
+
+#, python-format
+msgid "Applying failed (%s); the previous configuration is back."
+msgstr "Aplicar falhou (%s); a configuração anterior voltou."
+
+msgid "Keep these settings?"
+msgstr "Manter estas configurações?"
+
+msgid "Revert"
+msgstr "Reverter"
+
+msgid "Keep"
+msgstr "Manter"
+
+#, python-format
+msgid "The previous configuration comes back in %d s."
+msgstr "A configuração anterior volta em %d s."
+
+msgid "The confirmation came too late; the previous configuration was restored."
+msgstr "A confirmação chegou tarde demais; a configuração anterior foi restaurada."
+
+msgid "Configuration kept and saved for this set of monitors."
+msgstr "Configuração mantida e salva para este conjunto de monitores."
+
+msgid "Could not restore the previous configuration automatically."
+msgstr "Não foi possível restaurar a configuração anterior automaticamente."
+
+msgid "The previous configuration was restored."
+msgstr "A configuração anterior foi restaurada."
+
+msgid "Off:"
+msgstr "Desligados:"
+
+msgid "primary"
+msgstr "principal"
+
+#, python-format
+msgid "mirrors %s"
+msgstr "espelha %s"
+
+msgid "Drag to place; arrows move 1 pixel (Shift: 10)"
+msgstr "Arraste para posicionar; as setas movem 1 pixel (Shift: 10)"
+
+#, python-format
+msgid "%s at %d, %d"
+msgstr "%s em %d, %d"
