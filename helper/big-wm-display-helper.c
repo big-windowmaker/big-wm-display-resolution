@@ -847,15 +847,9 @@ static int cmd_x11_watch(bool run_now, char **argv)
             XRRUpdateConfiguration(&e);
             if (e.type == ev + RRNotify || e.type == ev + RRScreenChangeNotify) changed = true;
         }
-        if (changed) {
-            char *sig = x_signature(dpy, root, NULL);
-            if (strcmp(sig, last) != 0) {
-                deadline = now_ms() + DEBOUNCE_MS;
-            } else {
-                deadline = -1;
-            }
-            free(sig);
-        }
+        // Confere depois de uma pausa: o estado "conectado" de uma saída pode
+        // mudar depois do primeiro evento (e vários eventos vêm juntos).
+        if (changed) deadline = now_ms() + DEBOUNCE_MS;
         if (deadline >= 0 && now_ms() >= deadline) {
             char *sig = x_signature(dpy, root, NULL);
             deadline = -1;

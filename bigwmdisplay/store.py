@@ -220,7 +220,9 @@ class Store:
         if old is not None:
             prof["id"] = old["id"]
             prof["created"] = old.get("created", prof["created"])
-            prof["name"] = old.get("name") or prof["name"]
+            # O nome de uma migração (ARandR, OutputState) não vale mais.
+            prof["name"] = prof["name"] or ""
+
             self.profiles[self.profiles.index(old)] = prof
         else:
             self.profiles.append(prof)
