@@ -41,7 +41,7 @@ msgstr "%(name)s não aceita esta orientação."
 
 #, python-format
 msgid "%(name)s: per-monitor scale does not exist on X11."
-msgstr "%(name)s: escala por monitor não existe no X11."
+msgstr "%(name)s: o X11 não tem escala por monitor."
 
 #, python-format
 msgid "%(name)s: the scale must be between 1 and 3."
@@ -67,7 +67,7 @@ msgstr "Posições negativas não são permitidas."
 
 #, python-format
 msgid "The arrangement (%(w)dx%(h)d) exceeds the maximum screen size (%(mw)dx%(mh)d)."
-msgstr "A disposição (%(w)dx%(h)d) passa do tamanho máximo da tela (%(mw)dx%(mh)d)."
+msgstr "A disposição (%(w)dx%(h)d) ultrapassa o tamanho máximo da tela (%(mw)dx%(mh)d)."
 
 msgid "Only one monitor can be the primary one."
 msgstr "Só um monitor pode ser o principal."
@@ -186,7 +186,7 @@ msgid "Saved automatically"
 msgstr "Salvo automaticamente"
 
 msgid "On Wayland, wlmaker has no configurable primary monitor: the first one in the arrangement holds the Dock."
-msgstr "No Wayland o wlmaker não tem monitor principal configurável: o primeiro da disposição fica com o Dock."
+msgstr "No Wayland, o wlmaker não tem monitor principal configurável: o primeiro da disposição fica com o Dock."
 
 msgid "Panels, the Dock and new windows prefer this monitor"
 msgstr "Painéis, o Dock e as janelas novas preferem este monitor"
@@ -199,7 +199,7 @@ msgid "Mirror %s"
 msgstr "Espelhar %s"
 
 msgid "Fractional scales reach applications that support fractional-scale; the others are drawn at 1× and enlarged."
-msgstr "Escalas fracionárias chegam aos aplicativos com fractional-scale; os outros são desenhados em 1× e ampliados."
+msgstr "As escalas fracionárias chegam aos aplicativos com suporte a fractional-scale; os outros são desenhados em 1× e ampliados."
 
 msgid "X11 has no per-monitor scale (xrandr --scale only stretches the picture). Use the GTK/Qt scale for larger text."
 msgstr "O X11 não tem escala por monitor (o xrandr --scale só estica a imagem). Para texto maior, use a escala do GTK/Qt."
@@ -230,7 +230,7 @@ msgid "The EDID declares %d–%d Hz."
 msgstr "O EDID declara %d–%d Hz."
 
 msgid "FreeSync block present."
-msgstr "Tem o bloco FreeSync."
+msgstr "Bloco FreeSync presente."
 
 msgid "The driver does not report whether this output supports VRR (no vrr_capable property)."
 msgstr "O driver não informa se esta saída aceita VRR (sem a propriedade vrr_capable)."
@@ -242,16 +242,16 @@ msgid "The driver reports this output as not VRR capable."
 msgstr "O driver informa que esta saída não aceita VRR."
 
 msgid "On X11 VRR is a driver option (Option \"VariableRefresh\" in xorg.conf), not a per-monitor setting."
-msgstr "No X11 o VRR é opção do driver (Option \"VariableRefresh\" no xorg.conf), não um ajuste por monitor."
+msgstr "No X11, o VRR é opção do driver (Option \"VariableRefresh\" no xorg.conf), não uma configuração por monitor."
 
 msgid "The compositor does not report adaptive sync (output management older than version 4)."
 msgstr "O compositor não informa a taxa variável (gerenciamento de saídas anterior à versão 4)."
 
 msgid "Adaptive sync is on and cannot be changed: the compositor refused the change in a test of this output."
-msgstr "A taxa variável está ligada e não pode mudar: o compositor recusou a troca num teste desta saída."
+msgstr "A taxa variável está ligada e não pode ser alterada: o compositor recusou a alteração num teste desta saída."
 
 msgid "Adaptive sync is off and cannot be changed: the compositor refused the change in a test of this output."
-msgstr "A taxa variável está desligada e não pode mudar: o compositor recusou a troca num teste desta saída."
+msgstr "A taxa variável está desligada e não pode ser alterada: o compositor recusou a alteração num teste desta saída."
 
 #, python-format
 msgid "The monitor declares HDR (%s)."
@@ -261,13 +261,13 @@ msgid "The monitor does not declare HDR in its EDID."
 msgstr "O monitor não declara HDR no EDID."
 
 msgid "No EDID: HDR capability unknown."
-msgstr "Sem EDID: não se sabe se há HDR."
+msgstr "Sem EDID: suporte a HDR desconhecido."
 
 msgid "X11 has no HDR output."
 msgstr "O X11 não tem saída HDR."
 
 msgid "wlmaker does not drive HDR outputs, and output management has no HDR setting: there is nothing to turn on here."
-msgstr "O wlmaker não liga saídas em HDR e o gerenciamento de saídas não tem ajuste de HDR: não há o que ligar aqui."
+msgstr "O wlmaker não controla saídas HDR e o gerenciamento de saídas não tem configuração de HDR: não há nada para ligar aqui."
 
 msgid "Manufacturer"
 msgstr "Fabricante"
@@ -276,7 +276,7 @@ msgid "Model"
 msgstr "Modelo"
 
 msgid "Serial"
-msgstr "Serial"
+msgstr "Número de série"
 
 msgid "not informed"
 msgstr "não informado"
@@ -345,7 +345,7 @@ msgstr "Não foi possível iniciar o vigia da reversão; nada foi mudado: %s"
 
 #, python-format
 msgid "Applying failed (%s); the previous configuration is back."
-msgstr "Aplicar falhou (%s); a configuração anterior voltou."
+msgstr "Não foi possível aplicar (%s); a configuração anterior voltou."
 
 msgid "Keep these display settings?"
 msgstr "Manter estas configurações de monitores?"
