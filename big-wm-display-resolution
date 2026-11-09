@@ -1,0 +1,31 @@
+#!/usr/bin/python3 -I
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Big WM Display Resolution: monitores das sessões X11 (Window Maker) e
+# Wayland (wlmaker) do Big WindowMaker. Ver bigwmdisplay/cli.py.
+
+import gettext
+import locale
+import os
+import sys
+
+HERE = os.path.dirname(os.path.realpath(__file__))
+DATADIR = os.environ.get("BIGWM_DISPLAY_DATADIR") or (
+    HERE if os.path.isdir(os.path.join(HERE, "bigwmdisplay")) else "/usr/share/big-wm-display-resolution")
+LOCALEDIR = os.environ.get("BIGWM_DISPLAY_LOCALEDIR", "/usr/share/locale")
+sys.path.insert(0, DATADIR)
+
+
+def main(argv):
+    try:
+        locale.setlocale(locale.LC_ALL, "")
+    except locale.Error:
+        pass
+    gettext.bindtextdomain("big-wm-display-resolution", LOCALEDIR)
+    gettext.textdomain("big-wm-display-resolution")
+    from bigwmdisplay import cli
+    return cli.main(argv[1:])
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
