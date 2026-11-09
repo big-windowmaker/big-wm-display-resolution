@@ -17,7 +17,7 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 from gi.repository import Gdk, Gio, GLib, Gtk, Pango  # noqa: E402
 
-from . import APP_ID, backend as backendmod, guard, model, store  # noqa: E402
+from . import APP_ID, backend as backendmod, guard, model, nextscroll, store  # noqa: E402
 from .guard import CONFIRM_SECONDS  # noqa: E402
 
 
@@ -97,6 +97,12 @@ ORIENTATIONS = (
     (2, N_("Landscape (upside down)")),
     (3, N_("Portrait (rotated right)")),
 )
+
+
+def page_css(mode):
+    """CSS da janela: controles OPENSTEP + barras de rolagem do WINGs."""
+    palette = PALETTES[mode]
+    return CSS.format(**palette) + nextscroll.css(palette, mode)
 
 
 def theme_mode():
@@ -183,7 +189,7 @@ class MainWindow(Gtk.ApplicationWindow):
                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.mode = theme_mode()
         self.palette = PALETTES[self.mode]
-        self.provider.load_from_data(CSS.format(**self.palette).encode())
+        self.provider.load_from_data(page_css(self.mode).encode())
         Gtk.Settings.get_default().connect("notify::gtk-theme-name", self._theme_changed)
 
         self.be = backendmod.get_backend()
@@ -196,6 +202,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self._pending = None
         self.osd = []
         self._build()
+        for w in (self.profile_combo, self.monitor_combo, self.use_combo, self.res_combo, self.rate_combo,
+                  self.scale_combo, self.orient_combo, self.spin_x, self.spin_y):
+            nextscroll.guard_wheel(w)
         self.connect("key-press-event", self._on_key)
         self.reload()
         self._fit_to_screen()
@@ -243,6 +252,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self.add(top)
         scroller = Gtk.ScrolledWindow()
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        # barra fixa ao lado do conteúdo, como no WINGs (não a "overlay",
+        # que some e fica por cima dos controles)
+        scroller.set_overlay_scrolling(False)
         scroller.set_propagate_natural_height(True)
         top.pack_start(scroller, True, True, 0)
         outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -406,6 +418,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.edid_view.set_size_request(260, 90)
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        sw.set_overlay_scrolling(False)
         sw.set_min_content_height(90)
         sw.add(self.edid_view)
         self.edid_expander.add(sw)
@@ -453,7 +466,7 @@ class MainWindow(Gtk.ApplicationWindow):
         if mode != self.mode:
             self.mode = mode
             self.palette = PALETTES[mode]
-            self.provider.load_from_data(CSS.format(**self.palette).encode())
+            self.provider.load_from_data(page_css(self.mode).encode())
             self.canvas.queue_draw()
 
     # -- Preenchimento dos controles ------------------------------------------
