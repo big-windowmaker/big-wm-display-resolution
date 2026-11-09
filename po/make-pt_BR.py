@@ -113,6 +113,10 @@ T = {
  "mirrors %s": "espelha %s",
  "Drag to place; arrows move 1 pixel (Shift: 10)": "Arraste para posicionar; as setas movem 1 pixel (Shift: 10)",
  "%s at %d, %d": "%s em %d, %d",
+ # Resumo do layout (--show e registros).
+ "%s: off": "%s: desligado",
+ "mirroring %s": "espelhando %s",
+ "%(name)s: %(w)dx%(h)d@%(hz).2f at %(x)d,%(y)d%(extra)s": "%(name)s: %(w)dx%(h)d@%(hz).2f em %(x)d,%(y)d%(extra)s",
  # Plurais: (forma 0, forma 1) pela regra (n > 1).
  "Changes not applied yet. Apply asks for confirmation and goes back to the previous configuration after %d second without an answer.": ("Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundo sem resposta.",
   "Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundos sem resposta."),

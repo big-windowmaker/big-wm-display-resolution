@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: big-wm-display-resolution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-09 06:15-0300\n"
+"POT-Creation-Date: 2026-11-09 06:19-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -529,7 +529,7 @@ msgstr ""
 msgid "Off:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1292
+#: bigwmdisplay/ui.py:1292 bigwmdisplay/backend.py:112
 msgid "primary"
 msgstr ""
 
@@ -603,4 +603,21 @@ msgstr ""
 #: bigwmdisplay/cli.py:204
 #, python-format
 msgid "profile not found: %s"
+msgstr ""
+
+#. TRANSLATORS: %s is a connector name such as HDMI-A-1.
+#: bigwmdisplay/backend.py:102
+#, python-format
+msgid "%s: off"
+msgstr ""
+
+#: bigwmdisplay/backend.py:106
+#, python-format
+msgid "mirroring %s"
+msgstr ""
+
+#. TRANSLATORS: connector: width x height @ refresh rate at x,y position, then details.
+#: bigwmdisplay/backend.py:114
+#, python-format
+msgid "%(name)s: %(w)dx%(h)d@%(hz).2f at %(x)d,%(y)d%(extra)s"
 msgstr ""

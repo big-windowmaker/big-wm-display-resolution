@@ -424,3 +424,15 @@ msgstr "perfil inválido: %s"
 #, python-format
 msgid "profile not found: %s"
 msgstr "perfil não encontrado: %s"
+
+#, python-format
+msgid "%s: off"
+msgstr "%s: desligado"
+
+#, python-format
+msgid "mirroring %s"
+msgstr "espelhando %s"
+
+#, python-format
+msgid "%(name)s: %(w)dx%(h)d@%(hz).2f at %(x)d,%(y)d%(extra)s"
+msgstr "%(name)s: %(w)dx%(h)d@%(hz).2f em %(x)d,%(y)d%(extra)s"
