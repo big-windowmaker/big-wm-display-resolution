@@ -42,7 +42,7 @@ T = {
  "Primary monitor": "Monitor principal",
  "Use:": "Uso:",
  "Resolution:": "Resolução:",
- "Refresh rate:": "Taxa de atualização:",
+ "Refresh rate:": "Frequência:",
  "Scale:": "Escala:",
  "Mirror image (reflect)": "Imagem espelhada (reflexo)",
  "Orientation:": "Orientação:",

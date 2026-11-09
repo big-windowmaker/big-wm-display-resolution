@@ -128,3 +128,4 @@ Profile	Perfil	display / KDE
 Revert guard	vigia da reversão	display (processo que volta a configuração anterior)
 Arrangement	disposição	display (posição relativa dos monitores)
 Extend the desktop	Estender a área de trabalho	GNOME/KDE
+Refresh rate: (rótulo do formulário)	Frequência:	display: "Taxa de atualização:" alarga a janela de 866 para 929 px (medido no laboratório); "Taxa de atualização" fica no texto e no VRR
