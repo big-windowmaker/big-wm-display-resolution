@@ -5,7 +5,7 @@ WindowMaker: cinzas, relevos de 1 pixel, controles compactos.
 Organização como nas configurações de tela do KDE Plasma: a área com os
 monitores (arrastar, com encaixe), os perfis no alto e os ajustes do
 monitor escolhido embaixo. Aplicar sempre passa pelo vigia da reversão e
-pela pergunta "Manter estas configurações?".
+pela pergunta "Manter estas configurações de monitores?".
 """
 
 import gettext
@@ -27,6 +27,10 @@ def _(text):
 
 def N_(text):
     return text
+
+
+def P_(singular, plural, n):
+    return gettext.ngettext(singular, plural, n)
 
 
 PALETTES = {
@@ -595,8 +599,11 @@ class MainWindow(Gtk.ApplicationWindow):
         if errors:
             self._message("\n".join(describe_errors(errors)), error=True)
         elif dirty:
-            self._message(_("Changes not applied yet. Apply asks for confirmation and goes back to the "
-                            "previous configuration after %d seconds without an answer.") % CONFIRM_SECONDS)
+            self._message(P_("Changes not applied yet. Apply asks for confirmation and goes back to the "
+                             "previous configuration after %d second without an answer.",
+                             "Changes not applied yet. Apply asks for confirmation and goes back to the "
+                             "previous configuration after %d seconds without an answer.",
+                             CONFIRM_SECONDS) % CONFIRM_SECONDS)
         else:
             self._message(self._status_text())
         p = self.profile_combo.get_active_id() or ""
@@ -612,10 +619,14 @@ class MainWindow(Gtk.ApplicationWindow):
         prof = self.st.best_for(self.current, self.be.name)
         n = len(self.current.outputs)
         if prof is None:
-            return _("%d monitor(s) connected. No saved configuration for this set of monitors yet: "
-                     "the one you keep is restored at login and when they are plugged in.") % n
-        return _("%d monitor(s) connected. This configuration is restored at login and whenever this "
-                 "same set of monitors is connected.") % n
+            return P_("%d monitor connected. No saved configuration for this monitor yet: "
+                      "the one you keep is restored at login and when it is plugged in.",
+                      "%d monitors connected. No saved configuration for this set of monitors yet: "
+                      "the one you keep is restored at login and when they are plugged in.", n) % n
+        return P_("%d monitor connected. This configuration is restored at login and whenever this "
+                  "same monitor is connected.",
+                  "%d monitors connected. This configuration is restored at login and whenever this "
+                  "same set of monitors is connected.", n) % n
 
     def _update_vrr_hdr(self, o):
         e = o.edid
@@ -647,10 +658,13 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.vrr_note.set_text(declared)
             else:
                 self.chk_vrr.set_visible(False)
-                state = _("on") if o.vrr else _("off")
-                self.vrr_note.set_text(_("Adaptive sync is %s and cannot be changed: the compositor refused "
-                                         "the change in a test of this output.") % state +
-                                       (" " + declared if declared else ""))
+                if o.vrr:
+                    fixed = _("Adaptive sync is on and cannot be changed: the compositor refused "
+                              "the change in a test of this output.")
+                else:
+                    fixed = _("Adaptive sync is off and cannot be changed: the compositor refused "
+                              "the change in a test of this output.")
+                self.vrr_note.set_text(fixed + (" " + declared if declared else ""))
         if e is not None and e.hdr:
             hdr = _("The monitor declares HDR (%s).") % ", ".join(e.hdr_eotfs)
         elif e is not None:
@@ -996,7 +1010,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self._confirm(g, target)
 
     def _confirm(self, g, target):
-        dlg = Gtk.Dialog(title=_("Keep these settings?"), transient_for=self, modal=True)
+        dlg = Gtk.Dialog(title=_("Keep these display settings?"), transient_for=self, modal=True)
         dlg.set_name("bwmdr")
         dlg.set_keep_above(True)
         btn_revert = dlg.add_button(_("Revert"), Gtk.ResponseType.CANCEL)
@@ -1006,7 +1020,7 @@ class MainWindow(Gtk.ApplicationWindow):
         box.set_border_width(10)
         box.set_spacing(6)
         title = Gtk.Label(xalign=0)
-        title.set_markup("<b>%s</b>" % GLib.markup_escape_text(_("Keep these settings?")))
+        title.set_markup("<b>%s</b>" % GLib.markup_escape_text(_("Keep these display settings?")))
         box.add(title)
         label = Gtk.Label(xalign=0)
         box.add(label)
@@ -1016,7 +1030,10 @@ class MainWindow(Gtk.ApplicationWindow):
             if left[0] <= 0:
                 dlg.response(Gtk.ResponseType.CANCEL)
                 return False
-            label.set_text(_("The previous configuration comes back in %d s.") % left[0])
+            # Conta de 15 a 1 (com 0 o diálogo já respondeu): o plural vale
+            # para todos os números mostrados.
+            label.set_text(P_("Reverting to the previous configuration in %d second.",
+                              "Reverting to the previous configuration in %d seconds.", left[0]) % left[0])
             left[0] -= 1
             return True
 

@@ -42,7 +42,7 @@ T = {
  "Primary monitor": "Monitor principal",
  "Use:": "Uso:",
  "Resolution:": "Resolução:",
- "Refresh rate:": "Frequência:",
+ "Refresh rate:": "Taxa de atualização:",
  "Scale:": "Escala:",
  "Mirror image (reflect)": "Imagem espelhada (reflexo)",
  "Orientation:": "Orientação:",
@@ -52,7 +52,7 @@ T = {
  "HDR:": "HDR:",
  "Information": "Informações",
  "EDID": "EDID",
- "Reset": "Desfazer",
+ "Reset": "Redefinir",
  "Discards the changes not yet applied": "Descarta as mudanças ainda não aplicadas",
  "Close": "Fechar",
  "Apply": "Aplicar",
@@ -66,9 +66,6 @@ T = {
  "Fractional scales reach applications that support fractional-scale; the others are drawn at 1× and enlarged.": "Escalas fracionárias chegam aos aplicativos com fractional-scale; os outros são desenhados em 1× e ampliados.",
  "X11 has no per-monitor scale (xrandr --scale only stretches the picture). Use the GTK/Qt scale for larger text.": "O X11 não tem escala por monitor (o xrandr --scale só estica a imagem). Para texto maior, use a escala do GTK/Qt.",
  "This monitor's driver does not offer reflection": "O driver deste monitor não oferece reflexo",
- "Changes not applied yet. Apply asks for confirmation and goes back to the previous configuration after %d seconds without an answer.": "Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundos sem resposta.",
- "%d monitor(s) connected. No saved configuration for this set of monitors yet: the one you keep is restored at login and when they are plugged in.": "%d monitor(es) conectado(s). Ainda não há configuração salva para este conjunto de monitores: a que você mantiver volta no login e quando eles forem conectados.",
- "%d monitor(s) connected. This configuration is restored at login and whenever this same set of monitors is connected.": "%d monitor(es) conectado(s). Esta configuração volta no login e sempre que este mesmo conjunto de monitores for conectado.",
  "The EDID declares %d–%d Hz.": "O EDID declara %d–%d Hz.",
  "FreeSync block present.": "Tem o bloco FreeSync.",
  "The driver does not report whether this output supports VRR (no vrr_capable property).": "O driver não informa se esta saída aceita VRR (sem a propriedade vrr_capable).",
@@ -76,9 +73,7 @@ T = {
  "The driver reports this output as not VRR capable.": "O driver informa que esta saída não aceita VRR.",
  "On X11 VRR is a driver option (Option \"VariableRefresh\" in xorg.conf), not a per-monitor setting.": "No X11 o VRR é opção do driver (Option \"VariableRefresh\" no xorg.conf), não um ajuste por monitor.",
  "The compositor does not report adaptive sync (output management older than version 4).": "O compositor não informa a taxa variável (gerenciamento de saídas anterior à versão 4).",
- "on": "ligada",
  "off": "desligado",
- "Adaptive sync is %s and cannot be changed: the compositor refused the change in a test of this output.": "A taxa variável está %s e não pode mudar: o compositor recusou a troca num teste desta saída.",
  "The monitor declares HDR (%s).": "O monitor declara HDR (%s).",
  "The monitor does not declare HDR in its EDID.": "O monitor não declara HDR no EDID.",
  "No EDID: HDR capability unknown.": "Sem EDID: não se sabe se há HDR.",
@@ -107,10 +102,8 @@ T = {
  "The configuration was refused in the test: %s": "A configuração foi recusada no teste: %s",
  "Could not start the revert guard, nothing was changed: %s": "Não foi possível iniciar o vigia da reversão; nada foi mudado: %s",
  "Applying failed (%s); the previous configuration is back.": "Aplicar falhou (%s); a configuração anterior voltou.",
- "Keep these settings?": "Manter estas configurações?",
  "Revert": "Reverter",
  "Keep": "Manter",
- "The previous configuration comes back in %d s.": "A configuração anterior volta em %d s.",
  "The confirmation came too late; the previous configuration was restored.": "A confirmação chegou tarde demais; a configuração anterior foi restaurada.",
  "Configuration kept and saved for this set of monitors.": "Configuração mantida e salva para este conjunto de monitores.",
  "Could not restore the previous configuration automatically.": "Não foi possível restaurar a configuração anterior automaticamente.",
@@ -120,20 +113,47 @@ T = {
  "mirrors %s": "espelha %s",
  "Drag to place; arrows move 1 pixel (Shift: 10)": "Arraste para posicionar; as setas movem 1 pixel (Shift: 10)",
  "%s at %d, %d": "%s em %d, %d",
+ # Plurais: (forma 0, forma 1) pela regra (n > 1).
+ "Changes not applied yet. Apply asks for confirmation and goes back to the previous configuration after %d second without an answer.": ("Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundo sem resposta.",
+  "Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundos sem resposta."),
+ "%d monitor connected. No saved configuration for this monitor yet: the one you keep is restored at login and when it is plugged in.": ("%d monitor conectado. Ainda não há configuração salva para este monitor: a que você mantiver volta no login e quando ele for conectado.",
+  "%d monitores conectados. Ainda não há configuração salva para este conjunto de monitores: a que você mantiver volta no login e quando eles forem conectados."),
+ "%d monitor connected. This configuration is restored at login and whenever this same monitor is connected.": ("%d monitor conectado. Esta configuração volta no login e sempre que este mesmo monitor for conectado.",
+  "%d monitores conectados. Esta configuração volta no login e sempre que este mesmo conjunto de monitores for conectado."),
+ "Adaptive sync is on and cannot be changed: the compositor refused the change in a test of this output.": "A taxa variável está ligada e não pode mudar: o compositor recusou a troca num teste desta saída.",
+ "Adaptive sync is off and cannot be changed: the compositor refused the change in a test of this output.": "A taxa variável está desligada e não pode mudar: o compositor recusou a troca num teste desta saída.",
+ "Keep these display settings?": "Manter estas configurações de monitores?",
+ "Reverting to the previous configuration in %d second.": ("Voltando à configuração anterior em %d segundo.",
+  "Voltando à configuração anterior em %d segundos."),
+ "Usage: big-wm-display-resolution [OPTION]\n\nMonitors of the X11 (Window Maker) and Wayland (wlmaker) sessions.\n\n  (none)                 open the window (or raise the open one)\n  --restore              at login: apply the profile of the connected set\n                         of monitors (no window)\n  --hotplug              the same, run by the watcher when a monitor\n                         is plugged in or out\n  --watch                hotplug watcher (replaces this process with\n                         big-wm-display-helper)\n  --show                 what is connected and the profile that applies\n  --profiles             list the profiles\n  --apply-profile NAME   apply a profile (no confirmation)\n  --version              show the version\n": "Uso: big-wm-display-resolution [OPÇÃO]\n\nMonitores das sessões X11 (Window Maker) e Wayland (wlmaker).\n\n  (nenhuma)              abre a janela (ou traz a que já está aberta)\n  --restore              no login: aplica o perfil do conjunto de\n                         monitores conectado (sem janela)\n  --hotplug              o mesmo, chamado pelo vigia quando um monitor\n                         é conectado ou desconectado\n  --watch                vigia de conexão de monitores (troca este\n                         processo pelo big-wm-display-helper)\n  --show                 o que está conectado e o perfil que vale\n  --profiles             lista os perfis\n  --apply-profile NOME   aplica um perfil (sem confirmação)\n  --version              mostra a versão\n",
+ "session: %s": "sessão: %s",
+ "profile: none for this set of monitors": "perfil: nenhum para este conjunto de monitores",
+ "automatic": "automático",
+ "profile: %s": "perfil: %s",
+ "%d monitor": ("%d monitor",
+  "%d monitores"),
+ "the profile is not for this set of monitors": "o perfil não é deste conjunto de monitores",
+ "invalid profile: %s": "perfil inválido: %s",
+ "profile not found: %s": "perfil não encontrado: %s",
 }
 
 
 def entries(pot):
-    cur, key, out, comments = None, None, [], []
+    """(msgid, msgid_plural ou None, comentários) de cada entrada do .pot."""
+    cur, key, out, comments = {}, None, [], []
     for line in open(pot, encoding="utf-8"):
         line = line.rstrip("\n")
         if line.startswith("msgid "):
-            key, cur = "id", [ast.literal_eval(line[6:])]
-        elif line.startswith("msgstr "):
-            out.append(("".join(cur), comments))
-            comments, key = [], None
-        elif line.startswith('"') and key:
-            cur.append(ast.literal_eval(line))
+            cur, key = {"id": [ast.literal_eval(line[6:])]}, "id"
+        elif line.startswith("msgid_plural "):
+            cur["plural"], key = [ast.literal_eval(line[13:])], "plural"
+        elif line.startswith("msgstr"):
+            if key in ("id", "plural"):
+                out.append(("".join(cur["id"]), "".join(cur["plural"]) if "plural" in cur else None, comments))
+                comments = []
+            key = "str"
+        elif line.startswith('"') and key in ("id", "plural"):
+            cur[key].append(ast.literal_eval(line))
         elif line.startswith("#"):
             comments.append(line)
     return out
@@ -148,15 +168,25 @@ missing = []
 with open(dest, "w", encoding="utf-8") as f:
     f.write('# Big WM Display Resolution: português do Brasil.\n# SPDX-License-Identifier: GPL-2.0-or-later\n'
             'msgid ""\nmsgstr ""\n"Project-Id-Version: big-wm-display-resolution\\n"\n'
-            '"PO-Revision-Date: 2026-11-09 00:00-0300\\n"\n"Last-Translator: Big WindowMaker\\n"\n'
+            '"PO-Revision-Date: 2026-11-09 12:00-0300\\n"\n"Last-Translator: Big WindowMaker\\n"\n'
             '"Language-Team: Portuguese (Brazil)\\n"\n"Language: pt_BR\\n"\n"MIME-Version: 1.0\\n"\n"Content-Type: text/plain; charset=UTF-8\\n"\n'
             '"Content-Transfer-Encoding: 8bit\\n"\n"Plural-Forms: nplurals=2; plural=(n > 1);\\n"\n')
-    for msgid, comments in entries(pot):
+    for msgid, plural, comments in entries(pot):
         if not msgid:
             continue
-        if msgid not in T:
+        tr = T.get(msgid)
+        # Plural: (singular, plural) pela regra (n > 1) do cabeçalho; 0 e 1
+        # usam a primeira forma.
+        if tr is None or (plural is not None) != isinstance(tr, tuple):
             missing.append(msgid)
-        f.write("\n" + "\n".join(c for c in comments if c.startswith("#,")) + ("\n" if any(c.startswith("#,") for c in comments) else ""))
-        f.write("msgid %s\nmsgstr %s\n" % (q(msgid), q(T.get(msgid, ""))))
+            tr = None
+        flags = [c for c in comments if c.startswith("#,")]
+        f.write("\n" + "".join(c + "\n" for c in flags))
+        if plural is None:
+            f.write("msgid %s\nmsgstr %s\n" % (q(msgid), q(tr or "")))
+        else:
+            tr = tr or ("", "")
+            f.write("msgid %s\nmsgid_plural %s\nmsgstr[0] %s\nmsgstr[1] %s\n"
+                    % (q(msgid), q(plural), q(tr[0]), q(tr[1])))
 if missing:
     sys.exit("sem tradução: %r" % missing)
