@@ -5,6 +5,9 @@ import ast
 import sys
 
 T = {
+ "The monitors were reconfigured by another program; your changes were kept and not applied yet.": "Os monitores foram reconfigurados por outro programa; as suas alterações continuam aqui, ainda não aplicadas.",
+ "The connected monitors changed (%d now); the window was updated and the changes not applied were discarded.": "Os monitores conectados mudaram (agora %d); a janela foi atualizada e as alterações não aplicadas foram descartadas.",
+ "The connected monitors changed (%d now); the window was updated.": "Os monitores conectados mudaram (agora %d); a janela foi atualizada.",
  "Landscape": "Paisagem",
  "Portrait (rotated left)": "Retrato (girado à esquerda)",
  "Landscape (upside down)": "Paisagem (de cabeça para baixo)",

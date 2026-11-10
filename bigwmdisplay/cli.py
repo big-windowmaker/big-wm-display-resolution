@@ -82,6 +82,10 @@ def extend_new(layout):
     return new
 
 
+def _label(prof):
+    return prof.get("name") or ("automático" if prof.get("kind") == "auto" else prof["id"])
+
+
 def restore(be, st, hotplug=False):
     """Aplica o perfil do conjunto conectado. Devolve um código de saída."""
     if hotplug and guard.lock_active():
@@ -99,12 +103,17 @@ def restore(be, st, hotplug=False):
     why = ""
     if prof is not None:
         target = store.apply_profile(prof, layout)
-        why = "perfil \"%s\"" % (prof.get("name") or ("automático" if prof.get("kind") == "auto" else prof["id"]))
+        why = "perfil \"%s\"" % _label(prof)
         if target is None:
             log("%s não vale mais para estes monitores (modo não anunciado)" % why)
     elif hotplug and session == "x11":
-        target = extend_new(layout)
-        why = "monitores novos à direita"
+        part = st.subset_target(layout, session)
+        if part is not None:
+            target, src = part
+            why = "parte do perfil \"%s\"" % _label(src)
+        else:
+            target = extend_new(layout)
+            why = "monitores novos à direita"
     if target is not None:
         errors = model.validate(target)
         if errors:

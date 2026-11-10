@@ -9,6 +9,7 @@ pela pergunta "Manter estas configurações?".
 """
 
 import gettext
+import os
 import subprocess
 
 import gi
@@ -28,6 +29,10 @@ def _(text):
 def N_(text):
     return text
 
+
+# Depois de um evento de monitores: o vigia (debounce de 0,8 s) aplica o
+# perfil do conjunto; a janela relê depois disso.
+HOTPLUG_SETTLE_MS = 1500
 
 PALETTES = {
     "light": dict(bg="#aeaaae", fg="#000000", light="#ffffff", dark="#515551", field="#c9c6c9",
@@ -195,8 +200,21 @@ class MainWindow(Gtk.ApplicationWindow):
         self.applied_profile = None     # perfil escolhido para aplicar
         self._pending = None
         self.osd = []
+        self._confirming = False
+        self._hotplug_timer = 0
+        self._notice = None             # aviso do hotplug, até a próxima edição
         self._build()
         self.connect("key-press-event", self._on_key)
+        # Monitor ligado, desligado ou reconfigurado por outro programa (o
+        # vigia aplicando o perfil): a janela acompanha, por evento (RandR no
+        # X11, wl_output no Wayland), sem consultar de tempos em tempos.
+        Gdk.Screen.get_default().connect("monitors-changed", self._on_monitors_changed)
+        # O GDK só conta monitores ligados: um monitor que acabou de ser
+        # conectado (ainda apagado, ou ligado logo depois pelo vigia) às vezes
+        # não gera sinal nenhum. O helper vigia as saídas conectadas.
+        self._watcher = None
+        self._start_watcher()
+        self.connect("destroy", lambda *_a: self._stop_watcher())
         self.reload()
         self._fit_to_screen()
         self.show_all()
@@ -221,10 +239,86 @@ class MainWindow(Gtk.ApplicationWindow):
             select = prim.name if prim else None
         self.selected = select
         self.applied_profile = None
+        self._notice = None
         self._fill_monitor_combo()
         self._fill_profiles()
         self._update_controls()
         self.canvas.fit()
+
+    def _start_watcher(self):
+        session = backendmod.session_type()
+        if session is None:
+            return
+        helper = backendmod.backend_wl.helper_path()
+        mode = "wl-watch" if session == "wayland" else "x11-watch"
+        try:
+            self._watcher = subprocess.Popen([helper, mode, "--print"], stdin=subprocess.DEVNULL,
+                                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        except OSError:
+            self._watcher = None
+            return
+        GLib.io_add_watch(self._watcher.stdout.fileno(), GLib.PRIORITY_DEFAULT,
+                          GLib.IO_IN | GLib.IO_HUP | GLib.IO_ERR, self._on_watcher)
+
+    def _on_watcher(self, fd, cond):
+        if cond & GLib.IO_IN:
+            data = os.read(fd, 4096)
+            if data:
+                self._on_monitors_changed()
+                return True
+        return False                    # o helper terminou
+
+    def _stop_watcher(self):
+        w, self._watcher = self._watcher, None
+        if w is not None and w.poll() is None:
+            w.terminate()
+            try:
+                w.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                w.kill()
+
+    def _on_monitors_changed(self, *_a):
+        # Os eventos chegam em rajada e o vigia ainda aplica o perfil logo
+        # depois: espera acalmar.
+        if self._hotplug_timer:
+            GLib.source_remove(self._hotplug_timer)
+        self._hotplug_timer = GLib.timeout_add(HOTPLUG_SETTLE_MS, self._monitors_settled)
+
+    def _monitors_settled(self):
+        self._hotplug_timer = 0
+        if self._confirming:
+            # "Manter estas configurações?" aberto: quem muda é a própria
+            # janela, que relê tudo depois da resposta.
+            return False
+        try:
+            now = self.be.query()
+        except Exception as e:  # noqa: BLE001
+            self._message(_("Could not read the monitors: %s") % e, error=True)
+            return False
+        if self.current is None:
+            self.reload()
+            return False
+        same_set = model.set_key(now.outputs) == model.set_key(self.current.outputs)
+        if same_set and model.same_config(now, self.current):
+            return False
+        edited = not model.same_config(self.edit, self.current)
+        if same_set and edited:
+            # Mesmos monitores, outra configuração vinda de fora: a edição
+            # continua valendo; a reversão volta para o estado novo.
+            self.current = now
+            self._message(_("The monitors were reconfigured by another program; "
+                            "your changes were kept and not applied yet."))
+            return False
+        self.reload(self.selected)
+        if not same_set:
+            n = len(self.current.outputs)
+            if edited:
+                self._notice = _("The connected monitors changed (%d now); the window was updated "
+                                 "and the changes not applied were discarded.") % n
+            else:
+                self._notice = _("The connected monitors changed (%d now); the window was updated.") % n
+            self._message(self._notice)
+        return False
 
     def sel(self):
         return self.edit.get(self.selected) if self.edit and self.selected else None
@@ -585,7 +679,7 @@ class MainWindow(Gtk.ApplicationWindow):
             self._message(_("Changes not applied yet. Apply asks for confirmation and goes back to the "
                             "previous configuration after %d seconds without an answer.") % CONFIRM_SECONDS)
         else:
-            self._message(self._status_text())
+            self._message(self._notice or self._status_text())
         p = self.profile_combo.get_active_id() or ""
         custom = self.st.get(p) if not p.startswith("@") else None
         self.btn_rename.set_sensitive(custom is not None)
@@ -1011,7 +1105,11 @@ class MainWindow(Gtk.ApplicationWindow):
         timer = GLib.timeout_add_seconds(1, tick)
         dlg.show_all()
         _center_on_primary(dlg)
-        resp = dlg.run()
+        self._confirming = True
+        try:
+            resp = dlg.run()
+        finally:
+            self._confirming = False
         if left[0] > 0:
             GLib.source_remove(timer)
         dlg.destroy()

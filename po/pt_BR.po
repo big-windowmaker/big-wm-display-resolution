@@ -86,6 +86,17 @@ msgstr "recomendada"
 msgid "Could not read the monitors: %s"
 msgstr "Não foi possível ler os monitores: %s"
 
+msgid "The monitors were reconfigured by another program; your changes were kept and not applied yet."
+msgstr "Os monitores foram reconfigurados por outro programa; as suas alterações continuam aqui, ainda não aplicadas."
+
+#, python-format
+msgid "The connected monitors changed (%d now); the window was updated and the changes not applied were discarded."
+msgstr "Os monitores conectados mudaram (agora %d); a janela foi atualizada e as alterações não aplicadas foram descartadas."
+
+#, python-format
+msgid "The connected monitors changed (%d now); the window was updated."
+msgstr "Os monitores conectados mudaram (agora %d); a janela foi atualizada."
+
 msgid "Profile:"
 msgstr "Perfil:"
 

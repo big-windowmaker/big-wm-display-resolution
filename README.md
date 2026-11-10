@@ -15,7 +15,9 @@ Configurações > Monitores.
   15 s — por um processo vigia separado, mesmo se a janela travar.
 - Perfis em `~/.config/big-wm/display-resolution/profiles.json` (com
   `profiles.json.bak`), aplicados no login e quando o conjunto de monitores
-  muda (eventos do XRandR / do compositor, sem polling).
+  muda (eventos do XRandR / do compositor, sem polling). Um conjunto que é
+  parte de um perfil (os monitores voltando um de cada vez) usa os lugares
+  desse perfil; a janela aberta acompanha a chegada e a saída de monitores.
 
     big-wm-display-resolution              a janela
     big-wm-display-resolution --restore    aplica o perfil do conjunto conectado
