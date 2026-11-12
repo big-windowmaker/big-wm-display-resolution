@@ -34,7 +34,7 @@ jobs:
 
       - name: Empacotar
         run: |
-          su builder -c "cd pkgbuild && BWMDR_SOURCE='git+file://$GITHUB_WORKSPACE#commit=$GITHUB_SHA' makepkg --nodeps --noconfirm"
+          su builder -c "cd pkgbuild && PACKAGER='Big WindowMaker <rruscher@gmail.com>' BWMDR_SOURCE='git+file://$GITHUB_WORKSPACE#commit=$GITHUB_SHA' makepkg --nodeps --noconfirm"
           ls -l pkgbuild/*.pkg.tar.zst
 
       - name: namcap

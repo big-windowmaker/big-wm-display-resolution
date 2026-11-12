@@ -12,13 +12,28 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/big-windowmaker/.github/main/profile/images/em-breve-display-resolution.png" alt="Janela do Big WM Display Resolution com o desenho dos monitores, perfil, resolução, frequência, escala, orientação e posição" width="720">
+  <b>Os monitores do Big WindowMaker: resolução, disposição, perfis e uma volta segura.</b><br>
+  X11 (Window Maker, XRandR) e Wayland (wlmaker, <code>wlr-output-management</code>).
 </p>
 
+<p align="center">
+  <a href="#recursos">Recursos</a> ·
+  <a href="#capturas">Capturas</a> ·
+  <a href="#instalar">Instalar</a> ·
+  <a href="#usar">Usar</a> ·
+  <a href="#desenvolvimento">Desenvolvimento</a> ·
+  <a href="#contribuir">Contribuir</a> ·
+  <a href="#créditos">Créditos</a> ·
+  <a href="#in-english">English</a>
+</p>
 
-Gerenciador de monitores das sessões do Big WindowMaker: X11 (Window Maker,
-pelo XRandR) e Wayland (wlmaker, pelo `wlr-output-management`). No menu,
-Configurações > Monitores.
+<p align="center">
+  <img src="docs/screenshots/claro.png" width="720" alt="Janela do Big WM Display Resolution no Window Maker: três monitores desenhados em escala (1920×1080, 1920×1080 e 1280×1024), o primeiro selecionado, com uso, resolução, frequência, escala, orientação, posição e as informações do EDID">
+</p>
+
+## Recursos
+
+No menu do Big WindowMaker: **Configurações > Monitores**.
 
 - Monitores em escala e na posição real; arrastar com encaixe, coordenadas
   exatas, Identificar.
@@ -35,6 +50,18 @@ Configurações > Monitores.
   parte de um perfil (os monitores voltando um de cada vez) usa os lugares
   desse perfil; a janela aberta acompanha a chegada e a saída de monitores.
 
+## Capturas
+
+Capturas de 12/11/2026: Window Maker com três monitores (driver `dummy` do
+Xorg, o mesmo do laboratório de testes).
+
+| | |
+|---|---|
+| ![A mesma janela no modo escuro do Big WindowMaker](docs/screenshots/escuro.png) | ![Sobre: ícone, versão, descrição, link do repositório e a licença GPL](docs/screenshots/sobre.png) |
+| Modo escuro (acompanha o tema da sessão) | Sobre, com os mantenedores e os agradecimentos em Créditos |
+
+## Usar
+
     big-wm-display-resolution              a janela
     big-wm-display-resolution --restore    aplica o perfil do conjunto conectado
     big-wm-display-resolution --watch      vigia de hotplug (autostart)
@@ -47,8 +74,8 @@ no repositório big-wm.
 
 ## Instalar
 
-No Big WindowMaker ele vem com o `big-wm-session` e o `big-wm-wayland`. Para
-compilar o pacote a partir deste repositório:
+No Big WindowMaker ele já vem instalado (dependência do `big-wm-session`).
+Para compilar o pacote a partir deste repositório:
 
 ```sh
 cd pkgbuild
@@ -71,6 +98,15 @@ Requisitos: Python 3 com PyGObject e pycairo, GTK 3, `wayland`, `libx11`,
 `libxrandr`, `xorg-xrandr`, `hwdata`; para os testes, `python-pytest`.
 Problemas e sugestões: [issues](https://github.com/big-windowmaker/big-wm-display-resolution/issues).
 
+## Contribuir
+
+- Problemas: [issues](https://github.com/big-windowmaker/big-wm-display-resolution/issues),
+  com a sessão (X11 ou Wayland) e a saída de `big-wm-display-resolution --show`.
+- Código: *pull request* com `make check` passando; leia o
+  [guia de contribuição](https://github.com/big-windowmaker/.github/blob/main/CONTRIBUTING.md).
+- Testes com monitores de verdade sem hardware: `tests/lab/xdummy.sh`
+  (Xorg sem root com o driver `dummy`, 16 saídas).
+
 ## Créditos
 
 **Mantenedores do Big WindowMaker:** Rafael Ruscher <rruscher@gmail.com> e
@@ -87,3 +123,14 @@ Os nomes dos fabricantes vêm do `pnp.ids` do pacote `hwdata`.
 ## Licença
 
 GPL-2.0-or-later — ver [LICENSE](LICENSE).
+
+## In English
+
+**Big WM Display Resolution** is the monitor manager of Big WindowMaker, for
+the X11 (Window Maker, XRandR) and Wayland (wlmaker, wlr-output-management)
+sessions: monitors drawn to scale, only the modes the monitor announces,
+profiles applied at login and on hotplug (events, no polling), and every
+change asks "Keep these settings?" and reverts by itself after 15 s, from a
+separate watchdog process. Build with `make && make check`; package with
+`pkgbuild/PKGBUILD`. Maintainers: Rafael Ruscher and Barnabé Di Kartola.
+License: GPL-2.0-or-later.
