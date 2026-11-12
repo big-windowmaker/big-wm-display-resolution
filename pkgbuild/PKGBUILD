@@ -1,4 +1,6 @@
-# Maintainer: Big WindowMaker <https://github.com/big-windowmaker>
+# Maintainer: Rafael Ruscher <rruscher@gmail.com>
+# Maintainer: Barnabé Di Kartola <barnabedikartola@gmail.com>
+# Big WindowMaker: https://github.com/big-windowmaker
 #
 # Big WM Display Resolution: monitores das sessões X11 e Wayland do Big
 # WindowMaker. Pacote próprio (repositório próprio); o big-wm-session e o

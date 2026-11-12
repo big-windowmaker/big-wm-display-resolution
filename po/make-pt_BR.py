@@ -5,6 +5,12 @@ import ast
 import sys
 
 T = {
+ "About": "Sobre",
+ "Display Resolution": "Monitores",
+ "Monitors of the Big WindowMaker sessions: resolution, layout, profiles and a safe way back, on X11 and Wayland.": "Monitores das sessões do Big WindowMaker: resolução, disposição, perfis e volta segura, no X11 e no Wayland.",
+ "Repository on GitHub": "Repositório no GitHub",
+ "Maintainers of Big WindowMaker": "Mantenedores do Big WindowMaker",
+ "Special thanks": "Agradecimentos especiais",
  "The monitors were reconfigured by another program; your changes were kept and not applied yet.": "Os monitores foram reconfigurados por outro programa; as suas alterações continuam aqui, ainda não aplicadas.",
  "The connected monitors changed (%d now); the window was updated and the changes not applied were discarded.": "Os monitores conectados mudaram (agora %d); a janela foi atualizada e as alterações não aplicadas foram descartadas.",
  "The connected monitors changed (%d now); the window was updated.": "Os monitores conectados mudaram (agora %d); a janela foi atualizada.",

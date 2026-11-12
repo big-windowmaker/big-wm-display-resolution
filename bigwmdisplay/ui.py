@@ -18,7 +18,7 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 from gi.repository import Gdk, Gio, GLib, Gtk, Pango  # noqa: E402
 
-from . import APP_ID, backend as backendmod, guard, model, nextscroll, store  # noqa: E402
+from . import APP_ID, VERSION, backend as backendmod, guard, model, nextscroll, store  # noqa: E402
 from .guard import CONFIRM_SECONDS  # noqa: E402
 
 
@@ -538,6 +538,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self.btn_reset.set_tooltip_text(_("Discards the changes not yet applied"))
         self.btn_reset.connect("clicked", lambda _b: self.reload(self.selected))
         brow.pack_start(self.btn_reset, False, False, 0)
+        self.btn_about = Gtk.Button(label=_("About"))
+        self.btn_about.connect("clicked", lambda _b: self._about())
+        brow.pack_start(self.btn_about, False, False, 0)
         self.btn_close = Gtk.Button(label=_("Close"))
         self.btn_close.connect("clicked", lambda _b: self.close())
         self.btn_apply = Gtk.Button(label=_("Apply"))
@@ -973,6 +976,30 @@ class MainWindow(Gtk.ApplicationWindow):
     def _on_default(self, _b):
         self.edit = model.default_layout(self.current)
         self.changed(refit=True)
+
+    def _about(self):
+        """Sobre: versão, mantenedores do Big WindowMaker, agradecimentos,
+        licença e repositório ("Nome URL": o GTK mostra o nome como link)."""
+        d = Gtk.AboutDialog(transient_for=self, modal=True)
+        d.set_program_name(_("Display Resolution"))
+        d.set_version(VERSION)
+        d.set_logo_icon_name("big-wm-display-resolution")
+        d.set_comments(_("Monitors of the Big WindowMaker sessions: resolution, layout, profiles and "
+                         "a safe way back, on X11 and Wayland."))
+        d.set_copyright("© 2026 Big WindowMaker")
+        d.set_license_type(Gtk.License.GPL_2_0)
+        d.set_website("https://github.com/big-windowmaker/big-wm-display-resolution")
+        d.set_website_label(_("Repository on GitHub"))
+        d.add_credit_section(_("Maintainers of Big WindowMaker"),
+                             ["Rafael Ruscher <rruscher@gmail.com>",
+                              "Barnabé Di Kartola <barnabedikartola@gmail.com>"])
+        d.add_credit_section(_("Special thanks"),
+                             ["Alfredo Kojima — Window Maker https://www.windowmaker.org/",
+                              "Philipp Kaeser — wlmaker https://github.com/phkaeser/wlmaker",
+                              "Bruno Gonçalves — BigLinux https://www.biglinux.com.br/",
+                              "Tales A. Mendonça — BigCommunity"])
+        d.connect("response", lambda w, _r: w.destroy())
+        d.show()
 
     def _on_key(self, _w, ev):
         o = self.sel()

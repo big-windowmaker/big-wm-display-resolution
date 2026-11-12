@@ -181,6 +181,9 @@ msgstr "Redefinir"
 msgid "Discards the changes not yet applied"
 msgstr "Descarta as mudanças ainda não aplicadas"
 
+msgid "About"
+msgstr "Sobre"
+
 msgid "Close"
 msgstr "Fechar"
 
@@ -320,6 +323,21 @@ msgstr "EDID (%d bytes)"
 
 msgid "EDID: not available"
 msgstr "EDID: indisponível"
+
+msgid "Display Resolution"
+msgstr "Monitores"
+
+msgid "Monitors of the Big WindowMaker sessions: resolution, layout, profiles and a safe way back, on X11 and Wayland."
+msgstr "Monitores das sessões do Big WindowMaker: resolução, disposição, perfis e volta segura, no X11 e no Wayland."
+
+msgid "Repository on GitHub"
+msgstr "Repositório no GitHub"
+
+msgid "Maintainers of Big WindowMaker"
+msgstr "Mantenedores do Big WindowMaker"
+
+msgid "Special thanks"
+msgstr "Agradecimentos especiais"
 
 msgid "This profile no longer fits these monitors (a mode it uses is not announced any more)."
 msgstr "Este perfil não serve mais para estes monitores (um modo que ele usa não é mais anunciado)."
