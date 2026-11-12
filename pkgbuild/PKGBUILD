@@ -16,7 +16,7 @@ pkgdesc="Big WindowMaker: monitores (resolução, disposição, perfis, reversã
 arch=('x86_64')
 url="https://github.com/big-windowmaker/big-wm-display-resolution"
 license=('GPL-2.0-or-later')
-depends=('python' 'python-gobject' 'python-cairo' 'gtk3' 'wayland' 'libx11' 'libxrandr'
+depends=('glibc' 'glib2' 'python' 'python-gobject' 'python-cairo' 'gtk3' 'pango' 'hicolor-icon-theme' 'wayland' 'libx11' 'libxrandr'
 	'xorg-xrandr' # backend X11
 	'hwdata'      # nomes dos fabricantes (pnp.ids), os mesmos do wlroots
 	'util-linux'  # logger
