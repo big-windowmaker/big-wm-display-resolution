@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: big-wm-display-resolution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-10 13:40-0300\n"
+"POT-Creation-Date: 2026-11-11 23:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,535 +16,626 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: bigwmdisplay/ui.py:99
+#: bigwmdisplay/ui.py:104
 msgid "Landscape"
 msgstr ""
 
-#: bigwmdisplay/ui.py:100
+#: bigwmdisplay/ui.py:105
 msgid "Portrait (rotated left)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:101
+#: bigwmdisplay/ui.py:106
 msgid "Landscape (upside down)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:102
+#: bigwmdisplay/ui.py:107
 msgid "Portrait (rotated right)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:118
+#: bigwmdisplay/ui.py:129
 msgid "At least one monitor must stay on."
 msgstr ""
 
-#: bigwmdisplay/ui.py:119
+#: bigwmdisplay/ui.py:130
 #, python-format
 msgid "%(name)s has no resolution."
 msgstr ""
 
-#: bigwmdisplay/ui.py:120
+#: bigwmdisplay/ui.py:131
 #, python-format
 msgid "%(name)s does not announce the mode %(mode)s."
 msgstr ""
 
-#: bigwmdisplay/ui.py:121
+#: bigwmdisplay/ui.py:132
 #, python-format
 msgid "%(name)s does not support this orientation."
 msgstr ""
 
-#: bigwmdisplay/ui.py:122
+#: bigwmdisplay/ui.py:133
 #, python-format
 msgid "%(name)s: per-monitor scale does not exist on X11."
 msgstr ""
 
-#: bigwmdisplay/ui.py:123
+#: bigwmdisplay/ui.py:134
 #, python-format
 msgid "%(name)s: the scale must be between 1 and 3."
 msgstr ""
 
-#: bigwmdisplay/ui.py:124
+#: bigwmdisplay/ui.py:135
 #, python-format
 msgid "%(name)s mirrors a monitor that is off or is itself a mirror."
 msgstr ""
 
-#: bigwmdisplay/ui.py:125
+#: bigwmdisplay/ui.py:136
 #, python-format
 msgid "%(name)s and %(source)s need the same resolution to mirror."
 msgstr ""
 
-#: bigwmdisplay/ui.py:126
+#: bigwmdisplay/ui.py:137
 #, python-format
 msgid "%(a)s and %(b)s overlap."
 msgstr ""
 
-#: bigwmdisplay/ui.py:127
+#: bigwmdisplay/ui.py:138
 msgid "The monitors must touch each other: there is a gap between them."
 msgstr ""
 
-#: bigwmdisplay/ui.py:128
+#: bigwmdisplay/ui.py:139
 msgid "Negative positions are not allowed."
 msgstr ""
 
-#: bigwmdisplay/ui.py:129
+#: bigwmdisplay/ui.py:140
 #, python-format
 msgid ""
 "The arrangement (%(w)dx%(h)d) exceeds the maximum screen size "
 "(%(mw)dx%(mh)d)."
 msgstr ""
 
-#: bigwmdisplay/ui.py:130
+#: bigwmdisplay/ui.py:141
 msgid "Only one monitor can be the primary one."
 msgstr ""
 
-#: bigwmdisplay/ui.py:143
+#: bigwmdisplay/ui.py:154
 #, python-format
 msgid "%.2f Hz"
 msgstr ""
 
-#: bigwmdisplay/ui.py:143 bigwmdisplay/ui.py:712 bigwmdisplay/ui.py:713
+#: bigwmdisplay/ui.py:154 bigwmdisplay/ui.py:779 bigwmdisplay/ui.py:780
 msgid "unknown"
 msgstr ""
 
-#: bigwmdisplay/ui.py:158 bigwmdisplay/ui.py:591
+#: bigwmdisplay/ui.py:169 bigwmdisplay/ui.py:648
 msgid "recommended"
 msgstr ""
 
-#: bigwmdisplay/ui.py:222
+#: bigwmdisplay/ui.py:242 bigwmdisplay/ui.py:309
 #, python-format
 msgid "Could not read the monitors: %s"
 msgstr ""
 
-#: bigwmdisplay/ui.py:269
+#: bigwmdisplay/ui.py:322
 msgid ""
 "The monitors were reconfigured by another program; your changes were kept "
 "and not applied yet."
 msgstr ""
 
-#: bigwmdisplay/ui.py:276
+#: bigwmdisplay/ui.py:329
 #, python-format
 msgid ""
 "The connected monitors changed (%d now); the window was updated and the "
 "changes not applied were discarded."
 msgstr ""
 
-#: bigwmdisplay/ui.py:279
+#: bigwmdisplay/ui.py:332
 #, python-format
 msgid "The connected monitors changed (%d now); the window was updated."
 msgstr ""
 
-#: bigwmdisplay/ui.py:311
+#: bigwmdisplay/ui.py:367
 msgid "Profile:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:316
+#: bigwmdisplay/ui.py:372
 msgid "Save as…"
 msgstr ""
 
-#: bigwmdisplay/ui.py:318
+#: bigwmdisplay/ui.py:374
 msgid "Rename…"
 msgstr ""
 
-#: bigwmdisplay/ui.py:320 bigwmdisplay/ui.py:1003
+#: bigwmdisplay/ui.py:376 bigwmdisplay/ui.py:1070
 msgid "Delete"
 msgstr ""
 
-#: bigwmdisplay/ui.py:335
+#: bigwmdisplay/ui.py:391
 msgid "Identify"
 msgstr ""
 
-#: bigwmdisplay/ui.py:336
+#: bigwmdisplay/ui.py:392
 msgid "Shows the name of each monitor on its screen"
 msgstr ""
 
-#: bigwmdisplay/ui.py:338
+#: bigwmdisplay/ui.py:394
 msgid "Side by side"
 msgstr ""
 
-#: bigwmdisplay/ui.py:339
+#: bigwmdisplay/ui.py:395
 msgid "Arranges the monitors in a row, left to right, aligned at the top"
 msgstr ""
 
-#: bigwmdisplay/ui.py:341
+#: bigwmdisplay/ui.py:397
 msgid "Defaults"
 msgstr ""
 
-#: bigwmdisplay/ui.py:342
+#: bigwmdisplay/ui.py:398
 msgid "All monitors on, at their native resolution, side by side"
 msgstr ""
 
-#: bigwmdisplay/ui.py:356 bigwmdisplay/ui.py:631
+#: bigwmdisplay/ui.py:412 bigwmdisplay/ui.py:688
 msgid "Monitor"
 msgstr ""
 
-#: bigwmdisplay/ui.py:365
+#: bigwmdisplay/ui.py:421
 msgid "Monitor:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:369
+#: bigwmdisplay/ui.py:425
 msgid "On"
 msgstr ""
 
-#: bigwmdisplay/ui.py:371
+#: bigwmdisplay/ui.py:427
 msgid "Primary monitor"
 msgstr ""
 
-#: bigwmdisplay/ui.py:379
+#: bigwmdisplay/ui.py:435
 msgid "Use:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:385
+#: bigwmdisplay/ui.py:441
 msgid "Resolution:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:391
+#: bigwmdisplay/ui.py:447
 msgid "Refresh rate:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:402
+#: bigwmdisplay/ui.py:458
 msgid "Scale:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:412
+#: bigwmdisplay/ui.py:468
 msgid "Mirror image (reflect)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:414
+#: bigwmdisplay/ui.py:470
 msgid "Orientation:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:430
+#: bigwmdisplay/ui.py:486
 msgid "Position:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:434
+#: bigwmdisplay/ui.py:490
 msgid "Variable refresh rate (VRR / Adaptive Sync)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:440
+#: bigwmdisplay/ui.py:496
 msgid "VRR:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:449
+#: bigwmdisplay/ui.py:505
 msgid "HDR:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:452
+#: bigwmdisplay/ui.py:508
 msgid "Information"
 msgstr ""
 
-#: bigwmdisplay/ui.py:458
+#: bigwmdisplay/ui.py:514
 msgid "EDID"
 msgstr ""
 
-#: bigwmdisplay/ui.py:480
+#: bigwmdisplay/ui.py:537
 msgid "Reset"
 msgstr ""
 
-#: bigwmdisplay/ui.py:481
+#: bigwmdisplay/ui.py:538
 msgid "Discards the changes not yet applied"
 msgstr ""
 
-#: bigwmdisplay/ui.py:484
+#: bigwmdisplay/ui.py:541
 msgid "Close"
 msgstr ""
 
-#: bigwmdisplay/ui.py:486
+#: bigwmdisplay/ui.py:543
 msgid "Apply"
 msgstr ""
 
-#: bigwmdisplay/ui.py:529
+#: bigwmdisplay/ui.py:586
 msgid "Current configuration"
 msgstr ""
 
-#: bigwmdisplay/ui.py:530
+#: bigwmdisplay/ui.py:587
 msgid "Defaults (all on, side by side)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:534
+#: bigwmdisplay/ui.py:591
 msgid "Saved automatically"
 msgstr ""
 
-#: bigwmdisplay/ui.py:559
+#: bigwmdisplay/ui.py:616
 msgid ""
 "On Wayland, wlmaker has no configurable primary monitor: the first one in "
 "the arrangement holds the Dock."
 msgstr ""
 
-#: bigwmdisplay/ui.py:562
+#: bigwmdisplay/ui.py:619
 msgid "Panels, the Dock and new windows prefer this monitor"
 msgstr ""
 
-#: bigwmdisplay/ui.py:565
+#: bigwmdisplay/ui.py:622
 msgid "Extend the desktop"
 msgstr ""
 
-#: bigwmdisplay/ui.py:568
+#: bigwmdisplay/ui.py:625
 #, python-format
 msgid "Mirror %s"
 msgstr ""
 
-#: bigwmdisplay/ui.py:605
+#: bigwmdisplay/ui.py:662
 msgid ""
 "Fractional scales reach applications that support fractional-scale; the "
 "others are drawn at 1× and enlarged."
 msgstr ""
 
-#: bigwmdisplay/ui.py:611
+#: bigwmdisplay/ui.py:668
 msgid ""
 "X11 has no per-monitor scale (xrandr --scale only stretches the picture). "
 "Use the GTK/Qt scale for larger text."
 msgstr ""
 
-#: bigwmdisplay/ui.py:620
+#: bigwmdisplay/ui.py:677
 msgid "This monitor's driver does not offer reflection"
 msgstr ""
 
-#: bigwmdisplay/ui.py:639
+#: bigwmdisplay/ui.py:696
 #, python-format
 msgid ""
 "Changes not applied yet. Apply asks for confirmation and goes back to the "
+"previous configuration after %d second without an answer."
+msgid_plural ""
+"Changes not applied yet. Apply asks for confirmation and goes back to the "
 "previous configuration after %d seconds without an answer."
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 
-#: bigwmdisplay/ui.py:656
+#: bigwmdisplay/ui.py:716
 #, python-format
 msgid ""
-"%d monitor(s) connected. No saved configuration for this set of monitors "
-"yet: the one you keep is restored at login and when they are plugged in."
-msgstr ""
+"%d monitor connected. No saved configuration for this monitor yet: the one "
+"you keep is restored at login and when it is plugged in."
+msgid_plural ""
+"%d monitors connected. No saved configuration for this set of monitors yet: "
+"the one you keep is restored at login and when they are plugged in."
+msgstr[0] ""
+msgstr[1] ""
 
-#: bigwmdisplay/ui.py:658
+#: bigwmdisplay/ui.py:720
 #, python-format
 msgid ""
-"%d monitor(s) connected. This configuration is restored at login and "
-"whenever this same set of monitors is connected."
-msgstr ""
+"%d monitor connected. This configuration is restored at login and whenever "
+"this same monitor is connected."
+msgid_plural ""
+"%d monitors connected. This configuration is restored at login and whenever "
+"this same set of monitors is connected."
+msgstr[0] ""
+msgstr[1] ""
 
-#: bigwmdisplay/ui.py:665
+#: bigwmdisplay/ui.py:729
 #, python-format
 msgid "The EDID declares %d–%d Hz."
 msgstr ""
 
-#: bigwmdisplay/ui.py:667
+#: bigwmdisplay/ui.py:731
 msgid "FreeSync block present."
 msgstr ""
 
-#: bigwmdisplay/ui.py:671
+#: bigwmdisplay/ui.py:735
 msgid ""
 "The driver does not report whether this output supports VRR (no vrr_capable "
 "property)."
 msgstr ""
 
-#: bigwmdisplay/ui.py:673
+#: bigwmdisplay/ui.py:737
 msgid "The driver reports this output as VRR capable."
 msgstr ""
 
-#: bigwmdisplay/ui.py:675
+#: bigwmdisplay/ui.py:739
 msgid "The driver reports this output as not VRR capable."
 msgstr ""
 
-#: bigwmdisplay/ui.py:676
+#: bigwmdisplay/ui.py:740
 msgid ""
 "On X11 VRR is a driver option (Option \"VariableRefresh\" in xorg.conf), not "
 "a per-monitor setting."
 msgstr ""
 
-#: bigwmdisplay/ui.py:682
+#: bigwmdisplay/ui.py:746
 msgid ""
 "The compositor does not report adaptive sync (output management older than "
 "version 4)."
 msgstr ""
 
-#: bigwmdisplay/ui.py:691
-msgid "on"
-msgstr ""
-
-#: bigwmdisplay/ui.py:691 bigwmdisplay/ui.py:718
-msgid "off"
-msgstr ""
-
-#: bigwmdisplay/ui.py:692
-#, python-format
+#: bigwmdisplay/ui.py:756
 msgid ""
-"Adaptive sync is %s and cannot be changed: the compositor refused the change "
+"Adaptive sync is on and cannot be changed: the compositor refused the change "
 "in a test of this output."
 msgstr ""
 
-#: bigwmdisplay/ui.py:696
+#: bigwmdisplay/ui.py:759
+msgid ""
+"Adaptive sync is off and cannot be changed: the compositor refused the "
+"change in a test of this output."
+msgstr ""
+
+#: bigwmdisplay/ui.py:763
 #, python-format
 msgid "The monitor declares HDR (%s)."
 msgstr ""
 
-#: bigwmdisplay/ui.py:698
+#: bigwmdisplay/ui.py:765
 msgid "The monitor does not declare HDR in its EDID."
 msgstr ""
 
-#: bigwmdisplay/ui.py:700
+#: bigwmdisplay/ui.py:767
 msgid "No EDID: HDR capability unknown."
 msgstr ""
 
-#: bigwmdisplay/ui.py:702
+#: bigwmdisplay/ui.py:769
 msgid "X11 has no HDR output."
 msgstr ""
 
-#: bigwmdisplay/ui.py:704
+#: bigwmdisplay/ui.py:771
 msgid ""
 "wlmaker does not drive HDR outputs, and output management has no HDR "
 "setting: there is nothing to turn on here."
 msgstr ""
 
-#: bigwmdisplay/ui.py:712
+#: bigwmdisplay/ui.py:779
 msgid "Manufacturer"
 msgstr ""
 
-#: bigwmdisplay/ui.py:713
+#: bigwmdisplay/ui.py:780
 msgid "Model"
 msgstr ""
 
-#: bigwmdisplay/ui.py:714
+#: bigwmdisplay/ui.py:781
 msgid "Serial"
 msgstr ""
 
-#: bigwmdisplay/ui.py:714 bigwmdisplay/ui.py:727
+#: bigwmdisplay/ui.py:781 bigwmdisplay/ui.py:794
 msgid "not informed"
 msgstr ""
 
-#: bigwmdisplay/ui.py:715
+#: bigwmdisplay/ui.py:782
 msgid "Connector"
 msgstr ""
 
-#: bigwmdisplay/ui.py:716
+#: bigwmdisplay/ui.py:783
 msgid "Native"
 msgstr ""
 
-#: bigwmdisplay/ui.py:717
+#: bigwmdisplay/ui.py:784
 msgid "Current"
 msgstr ""
 
-#: bigwmdisplay/ui.py:725 bigwmdisplay/ui.py:727
+#: bigwmdisplay/ui.py:785
+msgid "off"
+msgstr ""
+
+#: bigwmdisplay/ui.py:792 bigwmdisplay/ui.py:794
 msgid "Size"
 msgstr ""
 
-#: bigwmdisplay/ui.py:725
+#: bigwmdisplay/ui.py:792
 #, python-format
 msgid "%d × %d mm (%.1f″)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:728
+#: bigwmdisplay/ui.py:795
 msgid "Year"
 msgstr ""
 
-#: bigwmdisplay/ui.py:751
+#: bigwmdisplay/ui.py:818
 #, python-format
 msgid "EDID (%d bytes)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:755
+#: bigwmdisplay/ui.py:822
 msgid "EDID: not available"
 msgstr ""
 
-#: bigwmdisplay/ui.py:941
+#: bigwmdisplay/ui.py:1008
 msgid ""
 "This profile no longer fits these monitors (a mode it uses is not announced "
 "any more)."
 msgstr ""
 
-#: bigwmdisplay/ui.py:951 bigwmdisplay/ui.py:1002
+#: bigwmdisplay/ui.py:1018 bigwmdisplay/ui.py:1069
 msgid "Cancel"
 msgstr ""
 
-#: bigwmdisplay/ui.py:952
+#: bigwmdisplay/ui.py:1019
 msgid "OK"
 msgstr ""
 
-#: bigwmdisplay/ui.py:958
+#: bigwmdisplay/ui.py:1025
 msgid "Profile name:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:967
+#: bigwmdisplay/ui.py:1034
 msgid "Save profile"
 msgstr ""
 
-#: bigwmdisplay/ui.py:984
+#: bigwmdisplay/ui.py:1051
 msgid "Rename profile"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1000
+#: bigwmdisplay/ui.py:1067
 #, python-format
 msgid "Delete the profile \"%s\"?"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1000
+#: bigwmdisplay/ui.py:1067
 msgid "saved automatically"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1022
+#: bigwmdisplay/ui.py:1089
 #, python-format
 msgid "The configuration was refused in the test: %s"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1028
+#: bigwmdisplay/ui.py:1095
 #, python-format
 msgid "Could not start the revert guard, nothing was changed: %s"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1035
+#: bigwmdisplay/ui.py:1102
 #, python-format
 msgid "Applying failed (%s); the previous configuration is back."
 msgstr ""
 
-#: bigwmdisplay/ui.py:1040 bigwmdisplay/ui.py:1050
-msgid "Keep these settings?"
+#: bigwmdisplay/ui.py:1107 bigwmdisplay/ui.py:1117
+msgid "Keep these display settings?"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1043
+#: bigwmdisplay/ui.py:1110
 msgid "Revert"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1044
+#: bigwmdisplay/ui.py:1111
 msgid "Keep"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1060
+#: bigwmdisplay/ui.py:1129
 #, python-format
-msgid "The previous configuration comes back in %d s."
-msgstr ""
+msgid "Reverting to the previous configuration in %d second."
+msgid_plural "Reverting to the previous configuration in %d seconds."
+msgstr[0] ""
+msgstr[1] ""
 
-#: bigwmdisplay/ui.py:1081
+#: bigwmdisplay/ui.py:1151
 msgid ""
 "The confirmation came too late; the previous configuration was restored."
 msgstr ""
 
-#: bigwmdisplay/ui.py:1089
+#: bigwmdisplay/ui.py:1159
 msgid "Configuration kept and saved for this set of monitors."
 msgstr ""
 
-#: bigwmdisplay/ui.py:1094
+#: bigwmdisplay/ui.py:1164
 msgid "Could not restore the previous configuration automatically."
 msgstr ""
 
-#: bigwmdisplay/ui.py:1096
+#: bigwmdisplay/ui.py:1166
 msgid "The previous configuration was restored."
 msgstr ""
 
-#: bigwmdisplay/ui.py:1232
+#: bigwmdisplay/ui.py:1302
 msgid "Off:"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1320
+#: bigwmdisplay/ui.py:1390 bigwmdisplay/backend.py:112
 msgid "primary"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1322
+#: bigwmdisplay/ui.py:1392
 #, python-format
 msgid "mirrors %s"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1360
+#: bigwmdisplay/ui.py:1430
 msgid "Drag to place; arrows move 1 pixel (Shift: 10)"
 msgstr ""
 
-#: bigwmdisplay/ui.py:1381
+#: bigwmdisplay/ui.py:1451
 #, python-format
 msgid "%s at %d, %d"
+msgstr ""
+
+#: bigwmdisplay/cli.py:31
+msgid ""
+"Usage: big-wm-display-resolution [OPTION]\n"
+"\n"
+"Monitors of the X11 (Window Maker) and Wayland (wlmaker) sessions.\n"
+"\n"
+"  (none)                 open the window (or raise the open one)\n"
+"  --restore              at login: apply the profile of the connected set\n"
+"                         of monitors (no window)\n"
+"  --hotplug              the same, run by the watcher when a monitor\n"
+"                         is plugged in or out\n"
+"  --watch                hotplug watcher (replaces this process with\n"
+"                         big-wm-display-helper)\n"
+"  --show                 what is connected and the profile that applies\n"
+"  --profiles             list the profiles\n"
+"  --apply-profile NAME   apply a profile (no confirmation)\n"
+"  --version              show the version\n"
+msgstr ""
+
+#: bigwmdisplay/cli.py:173
+#, python-format
+msgid "session: %s"
+msgstr ""
+
+#: bigwmdisplay/cli.py:179
+msgid "profile: none for this set of monitors"
+msgstr ""
+
+#: bigwmdisplay/cli.py:181 bigwmdisplay/cli.py:190
+msgid "automatic"
+msgstr ""
+
+#: bigwmdisplay/cli.py:182
+#, python-format
+msgid "profile: %s"
+msgstr ""
+
+#: bigwmdisplay/cli.py:189
+#, python-format
+msgid "%d monitor"
+msgid_plural "%d monitors"
+msgstr[0] ""
+msgstr[1] ""
+
+#: bigwmdisplay/cli.py:200
+msgid "the profile is not for this set of monitors"
+msgstr ""
+
+#: bigwmdisplay/cli.py:204
+#, python-format
+msgid "invalid profile: %s"
+msgstr ""
+
+#: bigwmdisplay/cli.py:213
+#, python-format
+msgid "profile not found: %s"
+msgstr ""
+
+#. TRANSLATORS: %s is a connector name such as HDMI-A-1.
+#: bigwmdisplay/backend.py:102
+#, python-format
+msgid "%s: off"
+msgstr ""
+
+#: bigwmdisplay/backend.py:106
+#, python-format
+msgid "mirroring %s"
+msgstr ""
+
+#. TRANSLATORS: connector: width x height @ refresh rate at x,y position, then details.
+#: bigwmdisplay/backend.py:114
+#, python-format
+msgid "%(name)s: %(w)dx%(h)d@%(hz).2f at %(x)d,%(y)d%(extra)s"
 msgstr ""

@@ -5,7 +5,7 @@ WindowMaker: cinzas, relevos de 1 pixel, controles compactos.
 Organização como nas configurações de tela do KDE Plasma: a área com os
 monitores (arrastar, com encaixe), os perfis no alto e os ajustes do
 monitor escolhido embaixo. Aplicar sempre passa pelo vigia da reversão e
-pela pergunta "Manter estas configurações?".
+pela pergunta "Manter estas configurações de monitores?".
 """
 
 import gettext
@@ -18,7 +18,7 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 from gi.repository import Gdk, Gio, GLib, Gtk, Pango  # noqa: E402
 
-from . import APP_ID, backend as backendmod, guard, model, store  # noqa: E402
+from . import APP_ID, backend as backendmod, guard, model, nextscroll, store  # noqa: E402
 from .guard import CONFIRM_SECONDS  # noqa: E402
 
 
@@ -28,6 +28,10 @@ def _(text):
 
 def N_(text):
     return text
+
+
+def P_(singular, plural, n):
+    return gettext.ngettext(singular, plural, n)
 
 
 # Depois de um evento de monitores: o vigia (debounce de 0,8 s) aplica o
@@ -102,6 +106,12 @@ ORIENTATIONS = (
     (2, N_("Landscape (upside down)")),
     (3, N_("Portrait (rotated right)")),
 )
+
+
+def page_css(mode):
+    """CSS da janela: controles OPENSTEP + barras de rolagem do WINGs."""
+    palette = PALETTES[mode]
+    return CSS.format(**palette) + nextscroll.css(palette, mode)
 
 
 def theme_mode():
@@ -188,7 +198,7 @@ class MainWindow(Gtk.ApplicationWindow):
                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.mode = theme_mode()
         self.palette = PALETTES[self.mode]
-        self.provider.load_from_data(CSS.format(**self.palette).encode())
+        self.provider.load_from_data(page_css(self.mode).encode())
         Gtk.Settings.get_default().connect("notify::gtk-theme-name", self._theme_changed)
 
         self.be = backendmod.get_backend()
@@ -204,6 +214,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self._hotplug_timer = 0
         self._notice = None             # aviso do hotplug, até a próxima edição
         self._build()
+        for w in (self.profile_combo, self.monitor_combo, self.use_combo, self.res_combo, self.rate_combo,
+                  self.scale_combo, self.orient_combo, self.spin_x, self.spin_y):
+            nextscroll.guard_wheel(w)
         self.connect("key-press-event", self._on_key)
         # Monitor ligado, desligado ou reconfigurado por outro programa (o
         # vigia aplicando o perfil): a janela acompanha, por evento (RandR no
@@ -337,6 +350,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self.add(top)
         scroller = Gtk.ScrolledWindow()
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        # barra fixa ao lado do conteúdo, como no WINGs (não a "overlay",
+        # que some e fica por cima dos controles)
+        scroller.set_overlay_scrolling(False)
         scroller.set_propagate_natural_height(True)
         top.pack_start(scroller, True, True, 0)
         outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -500,6 +516,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.edid_view.set_size_request(260, 90)
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        sw.set_overlay_scrolling(False)
         sw.set_min_content_height(90)
         sw.add(self.edid_view)
         self.edid_expander.add(sw)
@@ -547,7 +564,7 @@ class MainWindow(Gtk.ApplicationWindow):
         if mode != self.mode:
             self.mode = mode
             self.palette = PALETTES[mode]
-            self.provider.load_from_data(CSS.format(**self.palette).encode())
+            self.provider.load_from_data(page_css(self.mode).encode())
             self.canvas.queue_draw()
 
     # -- Preenchimento dos controles ------------------------------------------
@@ -676,8 +693,11 @@ class MainWindow(Gtk.ApplicationWindow):
         if errors:
             self._message("\n".join(describe_errors(errors)), error=True)
         elif dirty:
-            self._message(_("Changes not applied yet. Apply asks for confirmation and goes back to the "
-                            "previous configuration after %d seconds without an answer.") % CONFIRM_SECONDS)
+            self._message(P_("Changes not applied yet. Apply asks for confirmation and goes back to the "
+                             "previous configuration after %d second without an answer.",
+                             "Changes not applied yet. Apply asks for confirmation and goes back to the "
+                             "previous configuration after %d seconds without an answer.",
+                             CONFIRM_SECONDS) % CONFIRM_SECONDS)
         else:
             self._message(self._notice or self._status_text())
         p = self.profile_combo.get_active_id() or ""
@@ -693,10 +713,14 @@ class MainWindow(Gtk.ApplicationWindow):
         prof = self.st.best_for(self.current, self.be.name)
         n = len(self.current.outputs)
         if prof is None:
-            return _("%d monitor(s) connected. No saved configuration for this set of monitors yet: "
-                     "the one you keep is restored at login and when they are plugged in.") % n
-        return _("%d monitor(s) connected. This configuration is restored at login and whenever this "
-                 "same set of monitors is connected.") % n
+            return P_("%d monitor connected. No saved configuration for this monitor yet: "
+                      "the one you keep is restored at login and when it is plugged in.",
+                      "%d monitors connected. No saved configuration for this set of monitors yet: "
+                      "the one you keep is restored at login and when they are plugged in.", n) % n
+        return P_("%d monitor connected. This configuration is restored at login and whenever this "
+                  "same monitor is connected.",
+                  "%d monitors connected. This configuration is restored at login and whenever this "
+                  "same set of monitors is connected.", n) % n
 
     def _update_vrr_hdr(self, o):
         e = o.edid
@@ -728,10 +752,13 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.vrr_note.set_text(declared)
             else:
                 self.chk_vrr.set_visible(False)
-                state = _("on") if o.vrr else _("off")
-                self.vrr_note.set_text(_("Adaptive sync is %s and cannot be changed: the compositor refused "
-                                         "the change in a test of this output.") % state +
-                                       (" " + declared if declared else ""))
+                if o.vrr:
+                    fixed = _("Adaptive sync is on and cannot be changed: the compositor refused "
+                              "the change in a test of this output.")
+                else:
+                    fixed = _("Adaptive sync is off and cannot be changed: the compositor refused "
+                              "the change in a test of this output.")
+                self.vrr_note.set_text(fixed + (" " + declared if declared else ""))
         if e is not None and e.hdr:
             hdr = _("The monitor declares HDR (%s).") % ", ".join(e.hdr_eotfs)
         elif e is not None:
@@ -1077,7 +1104,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self._confirm(g, target)
 
     def _confirm(self, g, target):
-        dlg = Gtk.Dialog(title=_("Keep these settings?"), transient_for=self, modal=True)
+        dlg = Gtk.Dialog(title=_("Keep these display settings?"), transient_for=self, modal=True)
         dlg.set_name("bwmdr")
         dlg.set_keep_above(True)
         btn_revert = dlg.add_button(_("Revert"), Gtk.ResponseType.CANCEL)
@@ -1087,7 +1114,7 @@ class MainWindow(Gtk.ApplicationWindow):
         box.set_border_width(10)
         box.set_spacing(6)
         title = Gtk.Label(xalign=0)
-        title.set_markup("<b>%s</b>" % GLib.markup_escape_text(_("Keep these settings?")))
+        title.set_markup("<b>%s</b>" % GLib.markup_escape_text(_("Keep these display settings?")))
         box.add(title)
         label = Gtk.Label(xalign=0)
         box.add(label)
@@ -1097,7 +1124,10 @@ class MainWindow(Gtk.ApplicationWindow):
             if left[0] <= 0:
                 dlg.response(Gtk.ResponseType.CANCEL)
                 return False
-            label.set_text(_("The previous configuration comes back in %d s.") % left[0])
+            # Conta de 15 a 1 (com 0 o diálogo já respondeu): o plural vale
+            # para todos os números mostrados.
+            label.set_text(P_("Reverting to the previous configuration in %d second.",
+                              "Reverting to the previous configuration in %d seconds.", left[0]) % left[0])
             left[0] -= 1
             return True
 

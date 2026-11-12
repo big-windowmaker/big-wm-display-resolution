@@ -3,6 +3,7 @@
 
 import json
 import os
+from gettext import gettext as _
 
 from . import backend_wl, model
 
@@ -92,21 +93,25 @@ class FakeBackend:
 
 
 def layout_summary(layout):
-    """Texto curto do layout (logs e --show)."""
+    """Texto curto do layout (logs e --show), no idioma do usuário; o nome
+    da rotação (normal, 90...) é o do xrandr e não se traduz."""
     parts = []
     for o in layout.outputs:
         if not o.enabled or o.mode is None:
-            parts.append("%s: desligado" % o.name)
+            # TRANSLATORS: %s is a connector name such as HDMI-A-1.
+            parts.append(_("%s: off") % o.name)
             continue
         extra = ""
         if o.mirror_of:
-            extra += " espelhando %s" % o.mirror_of
+            extra += " " + _("mirroring %s") % o.mirror_of
         if o.transform:
             extra += " %s" % model.TRANSFORMS[o.transform]
         if abs(o.scale - 1) > 1e-3:
             extra += " x%g" % o.scale
         if o.primary:
-            extra += " principal"
-        parts.append("%s: %dx%d@%.2f em %d,%d%s" % (o.name, o.mode.width, o.mode.height, o.mode.hz,
-                                                    o.x, o.y, extra))
+            extra += " " + _("primary")
+        # TRANSLATORS: connector: width x height @ refresh rate at x,y position, then details.
+        parts.append(_("%(name)s: %(w)dx%(h)d@%(hz).2f at %(x)d,%(y)d%(extra)s")
+                     % dict(name=o.name, w=o.mode.width, h=o.mode.height, hz=o.mode.hz,
+                            x=o.x, y=o.y, extra=extra))
     return "; ".join(parts)

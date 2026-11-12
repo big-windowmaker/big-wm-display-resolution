@@ -201,9 +201,11 @@ def test_failed_apply_is_reported(fake):
     assert cli.restore(be, store.Store()) == 1
 
 
-def test_cli_entry_points(fake):
-    env = dict(os.environ)
+def test_cli_entry_points(fake, tmp_path):
+    # Em inglês, sem os catálogos do sistema (a tradução tem o test_i18n.py).
+    env = dict(os.environ, LC_ALL="C.UTF-8", BIGWM_DISPLAY_LOCALEDIR=str(tmp_path / "no-locale"))
+    env.pop("LANGUAGE", None)
     out = subprocess.run([sys.executable, LAUNCHER, "--show"], capture_output=True, text=True, env=env)
-    assert out.returncode == 0 and "DP-1" in out.stdout and "nenhum" in out.stdout
+    assert out.returncode == 0 and "DP-1" in out.stdout and "profile: none" in out.stdout
     out = subprocess.run([sys.executable, LAUNCHER, "--bogus"], capture_output=True, text=True, env=env)
     assert out.returncode == 2

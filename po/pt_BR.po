@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: big-wm-display-resolution\n"
-"PO-Revision-Date: 2026-11-09 00:00-0300\n"
+"PO-Revision-Date: 2026-11-09 12:00-0300\n"
 "Last-Translator: Big WindowMaker\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt_BR\n"
@@ -41,7 +41,7 @@ msgstr "%(name)s não aceita esta orientação."
 
 #, python-format
 msgid "%(name)s: per-monitor scale does not exist on X11."
-msgstr "%(name)s: escala por monitor não existe no X11."
+msgstr "%(name)s: o X11 não tem escala por monitor."
 
 #, python-format
 msgid "%(name)s: the scale must be between 1 and 3."
@@ -67,7 +67,7 @@ msgstr "Posições negativas não são permitidas."
 
 #, python-format
 msgid "The arrangement (%(w)dx%(h)d) exceeds the maximum screen size (%(mw)dx%(mh)d)."
-msgstr "A disposição (%(w)dx%(h)d) passa do tamanho máximo da tela (%(mw)dx%(mh)d)."
+msgstr "A disposição (%(w)dx%(h)d) ultrapassa o tamanho máximo da tela (%(mw)dx%(mh)d)."
 
 msgid "Only one monitor can be the primary one."
 msgstr "Só um monitor pode ser o principal."
@@ -176,7 +176,7 @@ msgid "EDID"
 msgstr "EDID"
 
 msgid "Reset"
-msgstr "Desfazer"
+msgstr "Redefinir"
 
 msgid "Discards the changes not yet applied"
 msgstr "Descarta as mudanças ainda não aplicadas"
@@ -197,7 +197,7 @@ msgid "Saved automatically"
 msgstr "Salvo automaticamente"
 
 msgid "On Wayland, wlmaker has no configurable primary monitor: the first one in the arrangement holds the Dock."
-msgstr "No Wayland o wlmaker não tem monitor principal configurável: o primeiro da disposição fica com o Dock."
+msgstr "No Wayland, o wlmaker não tem monitor principal configurável: o primeiro da disposição fica com o Dock."
 
 msgid "Panels, the Dock and new windows prefer this monitor"
 msgstr "Painéis, o Dock e as janelas novas preferem este monitor"
@@ -210,7 +210,7 @@ msgid "Mirror %s"
 msgstr "Espelhar %s"
 
 msgid "Fractional scales reach applications that support fractional-scale; the others are drawn at 1× and enlarged."
-msgstr "Escalas fracionárias chegam aos aplicativos com fractional-scale; os outros são desenhados em 1× e ampliados."
+msgstr "As escalas fracionárias chegam aos aplicativos com suporte a fractional-scale; os outros são desenhados em 1× e ampliados."
 
 msgid "X11 has no per-monitor scale (xrandr --scale only stretches the picture). Use the GTK/Qt scale for larger text."
 msgstr "O X11 não tem escala por monitor (o xrandr --scale só estica a imagem). Para texto maior, use a escala do GTK/Qt."
@@ -219,23 +219,29 @@ msgid "This monitor's driver does not offer reflection"
 msgstr "O driver deste monitor não oferece reflexo"
 
 #, python-format
-msgid "Changes not applied yet. Apply asks for confirmation and goes back to the previous configuration after %d seconds without an answer."
-msgstr "Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundos sem resposta."
+msgid "Changes not applied yet. Apply asks for confirmation and goes back to the previous configuration after %d second without an answer."
+msgid_plural "Changes not applied yet. Apply asks for confirmation and goes back to the previous configuration after %d seconds without an answer."
+msgstr[0] "Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundo sem resposta."
+msgstr[1] "Mudanças ainda não aplicadas. Aplicar pede confirmação e volta à configuração anterior depois de %d segundos sem resposta."
 
 #, python-format
-msgid "%d monitor(s) connected. No saved configuration for this set of monitors yet: the one you keep is restored at login and when they are plugged in."
-msgstr "%d monitor(es) conectado(s). Ainda não há configuração salva para este conjunto de monitores: a que você mantiver volta no login e quando eles forem conectados."
+msgid "%d monitor connected. No saved configuration for this monitor yet: the one you keep is restored at login and when it is plugged in."
+msgid_plural "%d monitors connected. No saved configuration for this set of monitors yet: the one you keep is restored at login and when they are plugged in."
+msgstr[0] "%d monitor conectado. Ainda não há configuração salva para este monitor: a que você mantiver volta no login e quando ele for conectado."
+msgstr[1] "%d monitores conectados. Ainda não há configuração salva para este conjunto de monitores: a que você mantiver volta no login e quando eles forem conectados."
 
 #, python-format
-msgid "%d monitor(s) connected. This configuration is restored at login and whenever this same set of monitors is connected."
-msgstr "%d monitor(es) conectado(s). Esta configuração volta no login e sempre que este mesmo conjunto de monitores for conectado."
+msgid "%d monitor connected. This configuration is restored at login and whenever this same monitor is connected."
+msgid_plural "%d monitors connected. This configuration is restored at login and whenever this same set of monitors is connected."
+msgstr[0] "%d monitor conectado. Esta configuração volta no login e sempre que este mesmo monitor for conectado."
+msgstr[1] "%d monitores conectados. Esta configuração volta no login e sempre que este mesmo conjunto de monitores for conectado."
 
 #, python-format
 msgid "The EDID declares %d–%d Hz."
 msgstr "O EDID declara %d–%d Hz."
 
 msgid "FreeSync block present."
-msgstr "Tem o bloco FreeSync."
+msgstr "Bloco FreeSync presente."
 
 msgid "The driver does not report whether this output supports VRR (no vrr_capable property)."
 msgstr "O driver não informa se esta saída aceita VRR (sem a propriedade vrr_capable)."
@@ -247,20 +253,16 @@ msgid "The driver reports this output as not VRR capable."
 msgstr "O driver informa que esta saída não aceita VRR."
 
 msgid "On X11 VRR is a driver option (Option \"VariableRefresh\" in xorg.conf), not a per-monitor setting."
-msgstr "No X11 o VRR é opção do driver (Option \"VariableRefresh\" no xorg.conf), não um ajuste por monitor."
+msgstr "No X11, o VRR é opção do driver (Option \"VariableRefresh\" no xorg.conf), não uma configuração por monitor."
 
 msgid "The compositor does not report adaptive sync (output management older than version 4)."
 msgstr "O compositor não informa a taxa variável (gerenciamento de saídas anterior à versão 4)."
 
-msgid "on"
-msgstr "ligada"
+msgid "Adaptive sync is on and cannot be changed: the compositor refused the change in a test of this output."
+msgstr "A taxa variável está ligada e não pode ser alterada: o compositor recusou a alteração num teste desta saída."
 
-msgid "off"
-msgstr "desligado"
-
-#, python-format
-msgid "Adaptive sync is %s and cannot be changed: the compositor refused the change in a test of this output."
-msgstr "A taxa variável está %s e não pode mudar: o compositor recusou a troca num teste desta saída."
+msgid "Adaptive sync is off and cannot be changed: the compositor refused the change in a test of this output."
+msgstr "A taxa variável está desligada e não pode ser alterada: o compositor recusou a alteração num teste desta saída."
 
 #, python-format
 msgid "The monitor declares HDR (%s)."
@@ -270,13 +272,13 @@ msgid "The monitor does not declare HDR in its EDID."
 msgstr "O monitor não declara HDR no EDID."
 
 msgid "No EDID: HDR capability unknown."
-msgstr "Sem EDID: não se sabe se há HDR."
+msgstr "Sem EDID: suporte a HDR desconhecido."
 
 msgid "X11 has no HDR output."
 msgstr "O X11 não tem saída HDR."
 
 msgid "wlmaker does not drive HDR outputs, and output management has no HDR setting: there is nothing to turn on here."
-msgstr "O wlmaker não liga saídas em HDR e o gerenciamento de saídas não tem ajuste de HDR: não há o que ligar aqui."
+msgstr "O wlmaker não controla saídas HDR e o gerenciamento de saídas não tem configuração de HDR: não há nada para ligar aqui."
 
 msgid "Manufacturer"
 msgstr "Fabricante"
@@ -285,7 +287,7 @@ msgid "Model"
 msgstr "Modelo"
 
 msgid "Serial"
-msgstr "Serial"
+msgstr "Número de série"
 
 msgid "not informed"
 msgstr "não informado"
@@ -298,6 +300,9 @@ msgstr "Nativa"
 
 msgid "Current"
 msgstr "Atual"
+
+msgid "off"
+msgstr "desligado"
 
 msgid "Size"
 msgstr "Tamanho"
@@ -351,10 +356,10 @@ msgstr "Não foi possível iniciar o vigia da reversão; nada foi mudado: %s"
 
 #, python-format
 msgid "Applying failed (%s); the previous configuration is back."
-msgstr "Aplicar falhou (%s); a configuração anterior voltou."
+msgstr "Não foi possível aplicar (%s); a configuração anterior voltou."
 
-msgid "Keep these settings?"
-msgstr "Manter estas configurações?"
+msgid "Keep these display settings?"
+msgstr "Manter estas configurações de monitores?"
 
 msgid "Revert"
 msgstr "Reverter"
@@ -363,8 +368,10 @@ msgid "Keep"
 msgstr "Manter"
 
 #, python-format
-msgid "The previous configuration comes back in %d s."
-msgstr "A configuração anterior volta em %d s."
+msgid "Reverting to the previous configuration in %d second."
+msgid_plural "Reverting to the previous configuration in %d seconds."
+msgstr[0] "Voltando à configuração anterior em %d segundo."
+msgstr[1] "Voltando à configuração anterior em %d segundos."
 
 msgid "The confirmation came too late; the previous configuration was restored."
 msgstr "A confirmação chegou tarde demais; a configuração anterior foi restaurada."
@@ -394,3 +401,49 @@ msgstr "Arraste para posicionar; as setas movem 1 pixel (Shift: 10)"
 #, python-format
 msgid "%s at %d, %d"
 msgstr "%s em %d, %d"
+
+msgid "Usage: big-wm-display-resolution [OPTION]\n\nMonitors of the X11 (Window Maker) and Wayland (wlmaker) sessions.\n\n  (none)                 open the window (or raise the open one)\n  --restore              at login: apply the profile of the connected set\n                         of monitors (no window)\n  --hotplug              the same, run by the watcher when a monitor\n                         is plugged in or out\n  --watch                hotplug watcher (replaces this process with\n                         big-wm-display-helper)\n  --show                 what is connected and the profile that applies\n  --profiles             list the profiles\n  --apply-profile NAME   apply a profile (no confirmation)\n  --version              show the version\n"
+msgstr "Uso: big-wm-display-resolution [OPÇÃO]\n\nMonitores das sessões X11 (Window Maker) e Wayland (wlmaker).\n\n  (nenhuma)              abre a janela (ou traz a que já está aberta)\n  --restore              no login: aplica o perfil do conjunto de\n                         monitores conectado (sem janela)\n  --hotplug              o mesmo, chamado pelo vigia quando um monitor\n                         é conectado ou desconectado\n  --watch                vigia de conexão de monitores (troca este\n                         processo pelo big-wm-display-helper)\n  --show                 o que está conectado e o perfil que vale\n  --profiles             lista os perfis\n  --apply-profile NOME   aplica um perfil (sem confirmação)\n  --version              mostra a versão\n"
+
+#, python-format
+msgid "session: %s"
+msgstr "sessão: %s"
+
+msgid "profile: none for this set of monitors"
+msgstr "perfil: nenhum para este conjunto de monitores"
+
+msgid "automatic"
+msgstr "automático"
+
+#, python-format
+msgid "profile: %s"
+msgstr "perfil: %s"
+
+#, python-format
+msgid "%d monitor"
+msgid_plural "%d monitors"
+msgstr[0] "%d monitor"
+msgstr[1] "%d monitores"
+
+msgid "the profile is not for this set of monitors"
+msgstr "o perfil não é deste conjunto de monitores"
+
+#, python-format
+msgid "invalid profile: %s"
+msgstr "perfil inválido: %s"
+
+#, python-format
+msgid "profile not found: %s"
+msgstr "perfil não encontrado: %s"
+
+#, python-format
+msgid "%s: off"
+msgstr "%s: desligado"
+
+#, python-format
+msgid "mirroring %s"
+msgstr "espelhando %s"
+
+#, python-format
+msgid "%(name)s: %(w)dx%(h)d@%(hz).2f at %(x)d,%(y)d%(extra)s"
+msgstr "%(name)s: %(w)dx%(h)d@%(hz).2f em %(x)d,%(y)d%(extra)s"
