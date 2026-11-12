@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .pytest_cache/
 po/*.mo
+pkgbuild/src/
+pkgbuild/pkg/
+pkgbuild/big-wm-display-resolution/
+pkgbuild/*.pkg.tar
+pkgbuild/*.pkg.tar.*

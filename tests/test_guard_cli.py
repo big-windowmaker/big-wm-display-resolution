@@ -143,6 +143,53 @@ def test_x11_hotplug_without_profile_extends(cfg, tmp_path, monkeypatch):
     assert positions(p)["HDMI-1"] == (1920, 0, True)
 
 
+def _x11(tmp_path, monkeypatch, heads):
+    p = fake_state(tmp_path / "x.json", heads)
+    monkeypatch.setenv("BIGWM_DISPLAY_FAKE", str(p))
+    monkeypatch.setenv("BIGWM_DISPLAY_FAKE_SESSION", "x11")
+    return p
+
+
+def test_x11_hotplug_part_of_a_profile_keeps_its_places(cfg, tmp_path, monkeypatch):
+    """Os monitores voltam um de cada vez: o que chega vai para o lugar que
+    tem no perfil dos três (à esquerda), não para a direita."""
+    p = _x11(tmp_path, monkeypatch, [head("HDMI-1", "LG", "W", "3", x=0), head("DP-1", "LG", "W", "1", x=1920),
+                                     head("DP-2", "LG", "H", "2", x=3840)])
+    be = backend.get_backend()
+    st = store.Store()
+    st.remember(be.query())
+    st.save()
+    _x11(tmp_path, monkeypatch, [head("DP-1", "LG", "W", "1", x=0), head("HDMI-1", "LG", "W", "3", enabled=False)])
+    assert cli.restore(be, store.Store(), hotplug=True) == 0
+    pos = positions(p)
+    assert pos["HDMI-1"] == (0, 0, True) and pos["DP-1"] == (1920, 0, True)
+
+
+def test_x11_hotplug_part_of_a_profile_closes_the_gap(cfg, tmp_path, monkeypatch):
+    p = _x11(tmp_path, monkeypatch, [head("HDMI-1", "LG", "W", "3", x=0), head("DP-1", "LG", "W", "1", x=1920),
+                                     head("DP-2", "LG", "H", "2", x=3840)])
+    be = backend.get_backend()
+    st = store.Store()
+    st.remember(be.query())
+    st.save()
+    _x11(tmp_path, monkeypatch, [head("HDMI-1", "LG", "W", "3", x=0), head("DP-2", "LG", "H", "2", enabled=False)])
+    assert cli.restore(be, store.Store(), hotplug=True) == 0
+    pos = positions(p)
+    assert pos["HDMI-1"] == (0, 0, True) and pos["DP-2"] == (1920, 0, True)
+    assert store.Store().best_for(be.query(), "x11") is None    # nada gravado para o conjunto parcial
+
+
+def test_x11_hotplug_unknown_monitor_still_extends(cfg, tmp_path, monkeypatch):
+    p = _x11(tmp_path, monkeypatch, [head("DP-1", "LG", "W", "1"), head("DP-2", "LG", "H", "2", x=1920)])
+    be = backend.get_backend()
+    st = store.Store()
+    st.remember(be.query())
+    st.save()
+    _x11(tmp_path, monkeypatch, [head("DP-1", "LG", "W", "1", x=0), head("HDMI-1", "X", "Y", "9", enabled=False)])
+    assert cli.restore(be, store.Store(), hotplug=True) == 0
+    assert positions(p)["HDMI-1"] == (1920, 0, True)
+
+
 def test_failed_apply_is_reported(fake):
     be = backend.get_backend()
     st = store.Store()
@@ -154,9 +201,11 @@ def test_failed_apply_is_reported(fake):
     assert cli.restore(be, store.Store()) == 1
 
 
-def test_cli_entry_points(fake):
-    env = dict(os.environ)
+def test_cli_entry_points(fake, tmp_path):
+    # Em inglês, sem os catálogos do sistema (a tradução tem o test_i18n.py).
+    env = dict(os.environ, LC_ALL="C.UTF-8", BIGWM_DISPLAY_LOCALEDIR=str(tmp_path / "no-locale"))
+    env.pop("LANGUAGE", None)
     out = subprocess.run([sys.executable, LAUNCHER, "--show"], capture_output=True, text=True, env=env)
-    assert out.returncode == 0 and "DP-1" in out.stdout and "nenhum" in out.stdout
+    assert out.returncode == 0 and "DP-1" in out.stdout and "profile: none" in out.stdout
     out = subprocess.run([sys.executable, LAUNCHER, "--bogus"], capture_output=True, text=True, env=env)
     assert out.returncode == 2

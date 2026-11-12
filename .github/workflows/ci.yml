@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-package:
+    runs-on: ubuntu-24.04
+    container:
+      # manjarolinux/base:latest, fixado por digest (o mesmo do big-wm e do tabbed-dock).
+      image: docker.io/manjarolinux/base@sha256:a411decb8d219cb4b16b39618e9aa8ce8228acad9cba5b10420f804a20ca5c84
+    steps:
+      - name: Preparar ambiente de build
+        run: |
+          pacman -Syu --noconfirm --needed base-devel git gettext wayland libx11 libxrandr \
+            python python-gobject python-cairo python-pytest gtk3 xorg-xrandr hwdata
+          id builder >/dev/null 2>&1 || useradd -m builder
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Compilar e testar
+        run: |
+          chown -R builder: "$GITHUB_WORKSPACE"
+          su builder -c 'make && make check'
+          for f in po/*.po; do msgfmt --check --statistics -o /dev/null "$f"; done
+
+      - name: Empacotar
+        run: |
+          su builder -c "cd pkgbuild && BWMDR_SOURCE='git+file://$GITHUB_WORKSPACE#commit=$GITHUB_SHA' makepkg --nodeps --noconfirm"
+          ls -l pkgbuild/*.pkg.tar.zst
+
+      - name: namcap
+        run: |
+          pacman -S --noconfirm --needed namcap
+          cd pkgbuild
+          nc() { su builder -c "env PATH=/usr/local/bin:/usr/bin namcap $*"; }
+          nc PKGBUILD 2>&1 | tee namcap-PKGBUILD.txt
+          if grep -E 'not a valid PKGBUILD|command not found|^Error' namcap-PKGBUILD.txt; then exit 1; fi
+          for p in *.pkg.tar.zst; do echo "== $p"; nc "$p"; done | tee namcap.txt
+          if grep -E '^[^ ]+ E: ' namcap.txt; then exit 1; fi
+
+      # Consumido pelo big-windowmaker/build-iso (PACKAGE_SOURCES).
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: display-resolution-packages
+          path: pkgbuild/*.pkg.tar.zst
+          if-no-files-found: error
+          retention-days: 30

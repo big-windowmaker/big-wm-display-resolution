@@ -46,9 +46,13 @@ build/big-wm-display-helper: helper/big-wm-display-helper.c build/wlr-output-man
 check: all
 	env -u DISPLAY -u WAYLAND_DISPLAY python3 -m pytest -q -p no:cacheprovider tests
 
+# Fontes com texto traduzível: po/POTFILES (o teste tests/test_i18n.py
+# confere que o .pot é o que estes arquivos dão hoje).
+XGETTEXT_ARGS = -L Python --keyword=_ --keyword=N_ --keyword=P_:1,2 --keyword=ngettext:1,2 \
+		--from-code=UTF-8 --add-comments=TRANSLATORS: --package-name=big-wm-display-resolution
+
 po:
-	xgettext -L Python --keyword=_ --keyword=N_ --from-code=UTF-8 \
-		--package-name=big-wm-display-resolution -o po/big-wm-display-resolution.pot bigwmdisplay/ui.py
+	xgettext $(XGETTEXT_ARGS) -f po/POTFILES -o po/big-wm-display-resolution.pot
 	python3 po/make-pt_BR.py po/big-wm-display-resolution.pot po/pt_BR.po
 
 install: all

@@ -20,8 +20,29 @@
 import os
 import subprocess
 import sys
+from gettext import gettext as _, ngettext
 
 from . import VERSION, backend as backendmod, guard, migrate, model, store
+
+
+def usage():
+    """A ajuda da linha de comando (traduzida; o docstring acima é para quem
+    lê o código). As opções e os comandos não se traduzem."""
+    return _("Usage: big-wm-display-resolution [OPTION]\n"
+             "\n"
+             "Monitors of the X11 (Window Maker) and Wayland (wlmaker) sessions.\n"
+             "\n"
+             "  (none)                 open the window (or raise the open one)\n"
+             "  --restore              at login: apply the profile of the connected set\n"
+             "                         of monitors (no window)\n"
+             "  --hotplug              the same, run by the watcher when a monitor\n"
+             "                         is plugged in or out\n"
+             "  --watch                hotplug watcher (replaces this process with\n"
+             "                         big-wm-display-helper)\n"
+             "  --show                 what is connected and the profile that applies\n"
+             "  --profiles             list the profiles\n"
+             "  --apply-profile NAME   apply a profile (no confirmation)\n"
+             "  --version              show the version\n")
 
 
 def log(text):
@@ -82,6 +103,10 @@ def extend_new(layout):
     return new
 
 
+def _label(prof):
+    return prof.get("name") or ("automático" if prof.get("kind") == "auto" else prof["id"])
+
+
 def restore(be, st, hotplug=False):
     """Aplica o perfil do conjunto conectado. Devolve um código de saída."""
     if hotplug and guard.lock_active():
@@ -99,12 +124,17 @@ def restore(be, st, hotplug=False):
     why = ""
     if prof is not None:
         target = store.apply_profile(prof, layout)
-        why = "perfil \"%s\"" % (prof.get("name") or ("automático" if prof.get("kind") == "auto" else prof["id"]))
+        why = "perfil \"%s\"" % _label(prof)
         if target is None:
             log("%s não vale mais para estes monitores (modo não anunciado)" % why)
     elif hotplug and session == "x11":
-        target = extend_new(layout)
-        why = "monitores novos à direita"
+        part = st.subset_target(layout, session)
+        if part is not None:
+            target, src = part
+            why = "parte do perfil \"%s\"" % _label(src)
+        else:
+            target = extend_new(layout)
+            why = "monitores novos à direita"
     if target is not None:
         errors = model.validate(target)
         if errors:
@@ -140,19 +170,24 @@ def watch():
 
 def show(be, st):
     layout = be.query()
-    print("sessão: %s" % be.name)
+    print(_("session: %s") % be.name)
     ids = model.identities(layout.outputs)
     for o in layout.outputs:
         print("%s\t%s\t%s" % (o.name, ids[o.name], backendmod.layout_summary(model.Layout(layout.backend, [o]))))
     prof = st.best_for(layout, be.name)
-    print("perfil: %s" % (prof.get("name") or prof["kind"] if prof else "nenhum para este conjunto"))
+    if prof is None:
+        print(_("profile: none for this set of monitors"))
+    else:
+        auto = _("automatic") if prof.get("kind") == "auto" else prof["kind"]
+        print(_("profile: %s") % (prof.get("name") or auto))
     return 0
 
 
 def list_profiles(st):
     for p in st.profiles:
         n = len(p.get("outputs", []))
-        print("%s\t%s\t%s\t%d monitor(es)" % (p["id"], p.get("session"), p.get("name") or "(automático)", n))
+        count = ngettext("%d monitor", "%d monitors", n) % n
+        print("%s\t%s\t%s\t%s" % (p["id"], p.get("session"), p.get("name") or "(%s)" % _("automatic"), count))
     return 0
 
 
@@ -162,11 +197,11 @@ def apply_named(be, st, name):
         if name in (p.get("name"), p["id"]):
             target = store.apply_profile(p, layout)
             if target is None:
-                print("o perfil não é deste conjunto de monitores", file=sys.stderr)
+                print(_("the profile is not for this set of monitors"), file=sys.stderr)
                 return 1
             errors = model.validate(target)
             if errors:
-                print("perfil inválido: %s" % errors, file=sys.stderr)
+                print(_("invalid profile: %s") % errors, file=sys.stderr)
                 return 1
             ok, msg = be.apply(target)
             if ok:
@@ -175,7 +210,7 @@ def apply_named(be, st, name):
                 return 0
             print(msg, file=sys.stderr)
             return 1
-    print("perfil não encontrado: %s" % name, file=sys.stderr)
+    print(_("profile not found: %s") % name, file=sys.stderr)
     return 1
 
 
@@ -199,8 +234,11 @@ def main(argv):
         if argv[0] == "--apply-profile":
             return apply_named(be, st, argv[1] if len(argv) > 1 else "")
         return restore(be, st, hotplug=argv[0] == "--hotplug")
+    if argv[:1] in (["--help"], ["-h"]):
+        print(usage(), end="")
+        return 0
     if argv and argv[0].startswith("-") and argv[0] not in ("--gapplication-service",):
-        print(__doc__.strip().split("\n\n", 1)[1], file=sys.stderr)
+        print(usage(), file=sys.stderr, end="")
         return 2
     from . import ui
     return ui.run([sys.argv[0]])

@@ -5,10 +5,11 @@ WindowMaker: cinzas, relevos de 1 pixel, controles compactos.
 Organização como nas configurações de tela do KDE Plasma: a área com os
 monitores (arrastar, com encaixe), os perfis no alto e os ajustes do
 monitor escolhido embaixo. Aplicar sempre passa pelo vigia da reversão e
-pela pergunta "Manter estas configurações?".
+pela pergunta "Manter estas configurações de monitores?".
 """
 
 import gettext
+import os
 import subprocess
 
 import gi
@@ -17,7 +18,7 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 from gi.repository import Gdk, Gio, GLib, Gtk, Pango  # noqa: E402
 
-from . import APP_ID, backend as backendmod, guard, model, store  # noqa: E402
+from . import APP_ID, VERSION, backend as backendmod, guard, model, nextscroll, store  # noqa: E402
 from .guard import CONFIRM_SECONDS  # noqa: E402
 
 
@@ -28,6 +29,14 @@ def _(text):
 def N_(text):
     return text
 
+
+def P_(singular, plural, n):
+    return gettext.ngettext(singular, plural, n)
+
+
+# Depois de um evento de monitores: o vigia (debounce de 0,8 s) aplica o
+# perfil do conjunto; a janela relê depois disso.
+HOTPLUG_SETTLE_MS = 1500
 
 PALETTES = {
     "light": dict(bg="#aeaaae", fg="#000000", light="#ffffff", dark="#515551", field="#c9c6c9",
@@ -97,6 +106,12 @@ ORIENTATIONS = (
     (2, N_("Landscape (upside down)")),
     (3, N_("Portrait (rotated right)")),
 )
+
+
+def page_css(mode):
+    """CSS da janela: controles OPENSTEP + barras de rolagem do WINGs."""
+    palette = PALETTES[mode]
+    return CSS.format(**palette) + nextscroll.css(palette, mode)
 
 
 def theme_mode():
@@ -183,7 +198,7 @@ class MainWindow(Gtk.ApplicationWindow):
                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.mode = theme_mode()
         self.palette = PALETTES[self.mode]
-        self.provider.load_from_data(CSS.format(**self.palette).encode())
+        self.provider.load_from_data(page_css(self.mode).encode())
         Gtk.Settings.get_default().connect("notify::gtk-theme-name", self._theme_changed)
 
         self.be = backendmod.get_backend()
@@ -195,8 +210,24 @@ class MainWindow(Gtk.ApplicationWindow):
         self.applied_profile = None     # perfil escolhido para aplicar
         self._pending = None
         self.osd = []
+        self._confirming = False
+        self._hotplug_timer = 0
+        self._notice = None             # aviso do hotplug, até a próxima edição
         self._build()
+        for w in (self.profile_combo, self.monitor_combo, self.use_combo, self.res_combo, self.rate_combo,
+                  self.scale_combo, self.orient_combo, self.spin_x, self.spin_y):
+            nextscroll.guard_wheel(w)
         self.connect("key-press-event", self._on_key)
+        # Monitor ligado, desligado ou reconfigurado por outro programa (o
+        # vigia aplicando o perfil): a janela acompanha, por evento (RandR no
+        # X11, wl_output no Wayland), sem consultar de tempos em tempos.
+        Gdk.Screen.get_default().connect("monitors-changed", self._on_monitors_changed)
+        # O GDK só conta monitores ligados: um monitor que acabou de ser
+        # conectado (ainda apagado, ou ligado logo depois pelo vigia) às vezes
+        # não gera sinal nenhum. O helper vigia as saídas conectadas.
+        self._watcher = None
+        self._start_watcher()
+        self.connect("destroy", lambda *_a: self._stop_watcher())
         self.reload()
         self._fit_to_screen()
         self.show_all()
@@ -221,10 +252,86 @@ class MainWindow(Gtk.ApplicationWindow):
             select = prim.name if prim else None
         self.selected = select
         self.applied_profile = None
+        self._notice = None
         self._fill_monitor_combo()
         self._fill_profiles()
         self._update_controls()
         self.canvas.fit()
+
+    def _start_watcher(self):
+        session = backendmod.session_type()
+        if session is None:
+            return
+        helper = backendmod.backend_wl.helper_path()
+        mode = "wl-watch" if session == "wayland" else "x11-watch"
+        try:
+            self._watcher = subprocess.Popen([helper, mode, "--print"], stdin=subprocess.DEVNULL,
+                                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        except OSError:
+            self._watcher = None
+            return
+        GLib.io_add_watch(self._watcher.stdout.fileno(), GLib.PRIORITY_DEFAULT,
+                          GLib.IO_IN | GLib.IO_HUP | GLib.IO_ERR, self._on_watcher)
+
+    def _on_watcher(self, fd, cond):
+        if cond & GLib.IO_IN:
+            data = os.read(fd, 4096)
+            if data:
+                self._on_monitors_changed()
+                return True
+        return False                    # o helper terminou
+
+    def _stop_watcher(self):
+        w, self._watcher = self._watcher, None
+        if w is not None and w.poll() is None:
+            w.terminate()
+            try:
+                w.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                w.kill()
+
+    def _on_monitors_changed(self, *_a):
+        # Os eventos chegam em rajada e o vigia ainda aplica o perfil logo
+        # depois: espera acalmar.
+        if self._hotplug_timer:
+            GLib.source_remove(self._hotplug_timer)
+        self._hotplug_timer = GLib.timeout_add(HOTPLUG_SETTLE_MS, self._monitors_settled)
+
+    def _monitors_settled(self):
+        self._hotplug_timer = 0
+        if self._confirming:
+            # "Manter estas configurações?" aberto: quem muda é a própria
+            # janela, que relê tudo depois da resposta.
+            return False
+        try:
+            now = self.be.query()
+        except Exception as e:  # noqa: BLE001
+            self._message(_("Could not read the monitors: %s") % e, error=True)
+            return False
+        if self.current is None:
+            self.reload()
+            return False
+        same_set = model.set_key(now.outputs) == model.set_key(self.current.outputs)
+        if same_set and model.same_config(now, self.current):
+            return False
+        edited = not model.same_config(self.edit, self.current)
+        if same_set and edited:
+            # Mesmos monitores, outra configuração vinda de fora: a edição
+            # continua valendo; a reversão volta para o estado novo.
+            self.current = now
+            self._message(_("The monitors were reconfigured by another program; "
+                            "your changes were kept and not applied yet."))
+            return False
+        self.reload(self.selected)
+        if not same_set:
+            n = len(self.current.outputs)
+            if edited:
+                self._notice = _("The connected monitors changed (%d now); the window was updated "
+                                 "and the changes not applied were discarded.") % n
+            else:
+                self._notice = _("The connected monitors changed (%d now); the window was updated.") % n
+            self._message(self._notice)
+        return False
 
     def sel(self):
         return self.edit.get(self.selected) if self.edit and self.selected else None
@@ -243,6 +350,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self.add(top)
         scroller = Gtk.ScrolledWindow()
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        # barra fixa ao lado do conteúdo, como no WINGs (não a "overlay",
+        # que some e fica por cima dos controles)
+        scroller.set_overlay_scrolling(False)
         scroller.set_propagate_natural_height(True)
         top.pack_start(scroller, True, True, 0)
         outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -406,6 +516,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.edid_view.set_size_request(260, 90)
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        sw.set_overlay_scrolling(False)
         sw.set_min_content_height(90)
         sw.add(self.edid_view)
         self.edid_expander.add(sw)
@@ -427,6 +538,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self.btn_reset.set_tooltip_text(_("Discards the changes not yet applied"))
         self.btn_reset.connect("clicked", lambda _b: self.reload(self.selected))
         brow.pack_start(self.btn_reset, False, False, 0)
+        self.btn_about = Gtk.Button(label=_("About"))
+        self.btn_about.connect("clicked", lambda _b: self._about())
+        brow.pack_start(self.btn_about, False, False, 0)
         self.btn_close = Gtk.Button(label=_("Close"))
         self.btn_close.connect("clicked", lambda _b: self.close())
         self.btn_apply = Gtk.Button(label=_("Apply"))
@@ -453,7 +567,7 @@ class MainWindow(Gtk.ApplicationWindow):
         if mode != self.mode:
             self.mode = mode
             self.palette = PALETTES[mode]
-            self.provider.load_from_data(CSS.format(**self.palette).encode())
+            self.provider.load_from_data(page_css(self.mode).encode())
             self.canvas.queue_draw()
 
     # -- Preenchimento dos controles ------------------------------------------
@@ -582,10 +696,13 @@ class MainWindow(Gtk.ApplicationWindow):
         if errors:
             self._message("\n".join(describe_errors(errors)), error=True)
         elif dirty:
-            self._message(_("Changes not applied yet. Apply asks for confirmation and goes back to the "
-                            "previous configuration after %d seconds without an answer.") % CONFIRM_SECONDS)
+            self._message(P_("Changes not applied yet. Apply asks for confirmation and goes back to the "
+                             "previous configuration after %d second without an answer.",
+                             "Changes not applied yet. Apply asks for confirmation and goes back to the "
+                             "previous configuration after %d seconds without an answer.",
+                             CONFIRM_SECONDS) % CONFIRM_SECONDS)
         else:
-            self._message(self._status_text())
+            self._message(self._notice or self._status_text())
         p = self.profile_combo.get_active_id() or ""
         custom = self.st.get(p) if not p.startswith("@") else None
         self.btn_rename.set_sensitive(custom is not None)
@@ -599,10 +716,14 @@ class MainWindow(Gtk.ApplicationWindow):
         prof = self.st.best_for(self.current, self.be.name)
         n = len(self.current.outputs)
         if prof is None:
-            return _("%d monitor(s) connected. No saved configuration for this set of monitors yet: "
-                     "the one you keep is restored at login and when they are plugged in.") % n
-        return _("%d monitor(s) connected. This configuration is restored at login and whenever this "
-                 "same set of monitors is connected.") % n
+            return P_("%d monitor connected. No saved configuration for this monitor yet: "
+                      "the one you keep is restored at login and when it is plugged in.",
+                      "%d monitors connected. No saved configuration for this set of monitors yet: "
+                      "the one you keep is restored at login and when they are plugged in.", n) % n
+        return P_("%d monitor connected. This configuration is restored at login and whenever this "
+                  "same monitor is connected.",
+                  "%d monitors connected. This configuration is restored at login and whenever this "
+                  "same set of monitors is connected.", n) % n
 
     def _update_vrr_hdr(self, o):
         e = o.edid
@@ -634,10 +755,13 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.vrr_note.set_text(declared)
             else:
                 self.chk_vrr.set_visible(False)
-                state = _("on") if o.vrr else _("off")
-                self.vrr_note.set_text(_("Adaptive sync is %s and cannot be changed: the compositor refused "
-                                         "the change in a test of this output.") % state +
-                                       (" " + declared if declared else ""))
+                if o.vrr:
+                    fixed = _("Adaptive sync is on and cannot be changed: the compositor refused "
+                              "the change in a test of this output.")
+                else:
+                    fixed = _("Adaptive sync is off and cannot be changed: the compositor refused "
+                              "the change in a test of this output.")
+                self.vrr_note.set_text(fixed + (" " + declared if declared else ""))
         if e is not None and e.hdr:
             hdr = _("The monitor declares HDR (%s).") % ", ".join(e.hdr_eotfs)
         elif e is not None:
@@ -853,6 +977,30 @@ class MainWindow(Gtk.ApplicationWindow):
         self.edit = model.default_layout(self.current)
         self.changed(refit=True)
 
+    def _about(self):
+        """Sobre: versão, mantenedores do Big WindowMaker, agradecimentos,
+        licença e repositório ("Nome URL": o GTK mostra o nome como link)."""
+        d = Gtk.AboutDialog(transient_for=self, modal=True)
+        d.set_program_name(_("Display Resolution"))
+        d.set_version(VERSION)
+        d.set_logo_icon_name("big-wm-display-resolution")
+        d.set_comments(_("Monitors of the Big WindowMaker sessions: resolution, layout, profiles and "
+                         "a safe way back, on X11 and Wayland."))
+        d.set_copyright("© 2026 Big WindowMaker")
+        d.set_license_type(Gtk.License.GPL_2_0)
+        d.set_website("https://github.com/big-windowmaker/big-wm-display-resolution")
+        d.set_website_label(_("Repository on GitHub"))
+        d.add_credit_section(_("Maintainers of Big WindowMaker"),
+                             ["Rafael Ruscher <rruscher@gmail.com>",
+                              "Barnabé Di Kartola <barnabedikartola@gmail.com>"])
+        d.add_credit_section(_("Special thanks"),
+                             ["Alfredo Kojima — Window Maker https://www.windowmaker.org/",
+                              "Philipp Kaeser — wlmaker https://github.com/phkaeser/wlmaker",
+                              "Bruno Gonçalves — BigLinux https://www.biglinux.com.br/",
+                              "Tales A. Mendonça — BigCommunity"])
+        d.connect("response", lambda w, _r: w.destroy())
+        d.show()
+
     def _on_key(self, _w, ev):
         o = self.sel()
         if o is None or not o.enabled or o.mirror_of:
@@ -983,7 +1131,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self._confirm(g, target)
 
     def _confirm(self, g, target):
-        dlg = Gtk.Dialog(title=_("Keep these settings?"), transient_for=self, modal=True)
+        dlg = Gtk.Dialog(title=_("Keep these display settings?"), transient_for=self, modal=True)
         dlg.set_name("bwmdr")
         dlg.set_keep_above(True)
         btn_revert = dlg.add_button(_("Revert"), Gtk.ResponseType.CANCEL)
@@ -993,7 +1141,7 @@ class MainWindow(Gtk.ApplicationWindow):
         box.set_border_width(10)
         box.set_spacing(6)
         title = Gtk.Label(xalign=0)
-        title.set_markup("<b>%s</b>" % GLib.markup_escape_text(_("Keep these settings?")))
+        title.set_markup("<b>%s</b>" % GLib.markup_escape_text(_("Keep these display settings?")))
         box.add(title)
         label = Gtk.Label(xalign=0)
         box.add(label)
@@ -1003,7 +1151,10 @@ class MainWindow(Gtk.ApplicationWindow):
             if left[0] <= 0:
                 dlg.response(Gtk.ResponseType.CANCEL)
                 return False
-            label.set_text(_("The previous configuration comes back in %d s.") % left[0])
+            # Conta de 15 a 1 (com 0 o diálogo já respondeu): o plural vale
+            # para todos os números mostrados.
+            label.set_text(P_("Reverting to the previous configuration in %d second.",
+                              "Reverting to the previous configuration in %d seconds.", left[0]) % left[0])
             left[0] -= 1
             return True
 
@@ -1011,7 +1162,11 @@ class MainWindow(Gtk.ApplicationWindow):
         timer = GLib.timeout_add_seconds(1, tick)
         dlg.show_all()
         _center_on_primary(dlg)
-        resp = dlg.run()
+        self._confirming = True
+        try:
+            resp = dlg.run()
+        finally:
+            self._confirming = False
         if left[0] > 0:
             GLib.source_remove(timer)
         dlg.destroy()

@@ -212,6 +212,36 @@ class Store:
                 return p
         return max(cands, key=lambda p: p.get("updated", 0))
 
+    def subset_target(self, layout, session):
+        """Sem perfil para o conjunto, mas ele é parte de um perfil maior
+        (um monitor ainda não voltou, ou está desligado no botão): a
+        disposição desse perfil, só com os presentes e sem vãos, em vez de
+        empilhar os novos à direita. Devolve (layout, perfil) ou None."""
+        keys = set(model.identities(layout.outputs).values())
+        if not keys:
+            return None
+        last = set(self.data["last_applied"].values())
+        cands = [p for p in self.profiles if p.get("session") == session
+                 and keys < {e.get("key") for e in p.get("outputs", [])}]
+        cands.sort(key=lambda p: (p["id"] in last, p.get("updated", 0)), reverse=True)
+        for p in cands:
+            part = dict(p)
+            part["outputs"] = [e for e in p["outputs"] if e.get("key") in keys]
+            part["setkey"] = model.set_key(layout.outputs)
+            target = apply_profile(part, layout)
+            if target is None or not target.enabled():
+                continue
+            model.normalize(target)
+            if model.validate(target):
+                # Faltou um do meio: os que ficaram encostam, na mesma ordem.
+                model.arrange_row(target)
+                model.normalize(target)
+            if target.caps.get("primary") and not target.primary():
+                min(target.enabled(), key=lambda o: (o.x, o.y)).primary = True
+            if not model.validate(target):
+                return target, p
+        return None
+
     def remember(self, layout, name=None, session=None):
         """Grava o layout como o perfil automático do conjunto."""
         session = session or layout.backend

@@ -14,6 +14,10 @@
 //                           vigia a chegada e a saída de monitores (eventos
 //                           do compositor ou do XRandR, sem polling) e
 //                           executa COMANDO quando o conjunto muda
+//   wl-watch --print | x11-watch --print
+//                           o mesmo, mas escreve o conjunto novo (uma linha)
+//                           na saída padrão, para a janela; termina junto
+//                           com o processo pai
 //   x11-outputs             saídas conectadas e o EDID (testes)
 //
 // No Wayland a configuração só passa pelo compositor (nunca xrandr no
@@ -28,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/prctl.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
@@ -94,8 +99,15 @@ static void on_signal(int sig)
 
 // Executa o comando e espera terminar (os eventos ficam na fila enquanto
 // isso; o próximo conjunto é comparado depois).
+static bool print_mode;
+
 static void run_command(char **argv, const char *signature)
 {
+    if (print_mode) {
+        // A janela fechou o pipe: não há mais quem avisar.
+        if (printf("%s\n", signature) < 0 || fflush(stdout) != 0) quit = 1;
+        return;
+    }
     pid_t pid = fork();
     if (pid == 0) {
         setenv("BIGWM_DISPLAY_SIGNATURE", signature, 1);
@@ -879,6 +891,7 @@ static int usage(void)
 {
     fputs("uso: big-wm-display-helper wl-dump | wl-apply [--test] |\n"
           "     wl-watch [--run-now] -- COMANDO... | x11-watch [--run-now] -- COMANDO... |\n"
+          "     wl-watch --print | x11-watch --print |\n"
           "     x11-outputs\n", stderr);
     return 2;
 }
@@ -888,6 +901,7 @@ static char **command_after_dashes(int argc, char **argv, bool *run_now)
     *run_now = false;
     for (int i = 2; i < argc; i++) {
         if (strcmp(argv[i], "--run-now") == 0) *run_now = true;
+        else if (strcmp(argv[i], "--print") == 0) print_mode = true;
         else if (strcmp(argv[i], "--") == 0 && i + 1 < argc) return &argv[i + 1];
         else return NULL;
     }
@@ -910,7 +924,12 @@ int main(int argc, char **argv)
     bool run_now;
     if (strcmp(cmd, "wl-watch") == 0 || strcmp(cmd, "x11-watch") == 0) {
         char **command = command_after_dashes(argc, argv, &run_now);
-        if (!command) return usage();
+        if (!command && !print_mode) return usage();
+        if (print_mode) {
+            // Vive só enquanto a janela que o abriu.
+            prctl(PR_SET_PDEATHSIG, SIGTERM);
+            if (getppid() == 1) return 0;
+        }
         return cmd[0] == 'w' ? cmd_wl_watch(run_now, command) : cmd_x11_watch(run_now, command);
     }
     return usage();
