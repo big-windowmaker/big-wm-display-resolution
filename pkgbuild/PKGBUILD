@@ -26,7 +26,7 @@ optdepends=(
 	'arandr: alternativa no X11'
 	'wdisplays: alternativa no Wayland'
 )
-makedepends=('git' 'wayland' 'gettext')
+makedepends=('git' 'gettext') # wayland-scanner: do wayland, já em depends
 checkdepends=('python-pytest')
 source=("$pkgname::${BWMDR_SOURCE:-git+$url.git}")
 sha256sums=('SKIP')
