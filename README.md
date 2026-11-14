@@ -169,8 +169,9 @@ Laboratórios (num X próprio, **nunca** na sessão de verdade):
   com a sessão (X11 ou Wayland) e a saída de `big-wm-display-resolution --show`.
 - Código: *pull request* com `make check` passando; leia o
   [guia de contribuição](https://github.com/big-windowmaker/.github/blob/main/CONTRIBUTING.md).
-- Tradução: `po/pt_BR.po`, com o glossário em `po/glossary/pt_BR.tsv`
-  (`make po` regenera; o teste confere que o `.pot` está em dia).
+- Tradução: edite o dicionário `T` em `po/make-pt_BR.py` (o glossário fica
+  em `po/glossary/pt_BR.tsv`); `make po` regenera o `.pot` e o
+  `po/pt_BR.po`, e o teste confere que os dois estão em dia.
 
 ## Créditos
 
