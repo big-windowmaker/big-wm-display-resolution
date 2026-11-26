@@ -75,8 +75,9 @@ A janela é a mesma; muda o backend, escolhido pela sessão.
 ## Instalar
 
 No Big WindowMaker ele já vem instalado (dependência do
-`big-wm-session`). Para compilar o pacote a partir deste
-repositório (Arch/Manjaro):
+`big-wm-session`). Em outro Arch/Manjaro com o repositório assinado
+[`[big-wm]`](https://github.com/big-windowmaker/repo) ativo: `sudo pacman -S big-wm-display-resolution`. Para compilar
+o pacote a partir deste repositório:
 
 ```sh
 cd pkgbuild
@@ -94,8 +95,8 @@ BWMDR_SOURCE="git+file://$PWD/.." makepkg -si
 | `gtk-layer-shell` (opcional) | Identificar no Wayland |
 | `arandr`, `wdisplays` (opcionais) | alternativas no X11 e no Wayland |
 
-O `pkgver` é a data da compilação (`aa.mm.dd`) e o `pkgrel` a hora, como no
-big-wm; a versão do programa (1.0.0) aparece no Sobre e em `--version`. O
+O `pkgver` é a data da compilação (`aa.mm.dd`) e o `pkgrel` a hora; a versão
+do programa (1.0.0) aparece no Sobre e em `--version`. O
 CI publica o pacote como artefato para a ISO (`build-iso`).
 
 Remover: `sudo pacman -R big-wm-display-resolution` (os perfis ficam em
